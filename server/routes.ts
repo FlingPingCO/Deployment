@@ -4,8 +4,25 @@ import { db } from "@db";
 import { profiles, notifications, resources, achievements } from "@db/schema";
 import { eq, sql } from "drizzle-orm";
 import { generateNotification } from "./services/ai-notification";
+import { setupSessionAuth } from "./auth";
 
 export function registerRoutes(app: Express): Server {
+  // Setup session management
+  setupSessionAuth(app);
+
+  // Test endpoint to demonstrate session usage
+  app.get('/api/session-test', (req, res) => {
+    if (!req.session.views) {
+      req.session.views = 0;
+    }
+    req.session.views++;
+    res.json({ 
+      message: 'Session is working!',
+      views: req.session.views,
+      sessionID: req.sessionID
+    });
+  });
+
   // Profile routes
   app.get('/api/profile', async (req, res) => {
     try {
