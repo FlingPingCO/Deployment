@@ -3,6 +3,7 @@ import { createServer, type Server } from "http";
 import { db } from "@db";
 import { profiles, notifications, resources, achievements } from "@db/schema";
 import { eq, sql } from "drizzle-orm";
+import { generateNotification } from "./services/ai-notification";
 
 export function registerRoutes(app: Express): Server {
   // Profile routes
@@ -48,9 +49,31 @@ export function registerRoutes(app: Express): Server {
   });
 
   // Notification routes
+  app.post('/api/notifications/generate', async (req, res) => {
+    try {
+      const { type, context } = req.body;
+      const message = await generateNotification(type, context);
+      res.json({ message });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to generate notification' });
+    }
+  });
+
   app.post('/api/notifications', async (req, res) => {
     try {
-      const notification = await db.insert(notifications).values(req.body).returning();
+      const { type, recipientPingPin, senderPingPin, context } = req.body;
+
+      // Generate AI message
+      const content = await generateNotification(type, context);
+
+      const notification = await db.insert(notifications).values({
+        type,
+        recipientPingPin,
+        senderPingPin,
+        content: { message: content },
+        read: false,
+      }).returning();
+
       res.json(notification[0]);
     } catch (error) {
       res.status(500).json({ error: 'Failed to send notification' });

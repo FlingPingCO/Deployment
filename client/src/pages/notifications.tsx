@@ -1,15 +1,67 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormDescription } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
-import { Bell, AlertCircle } from "lucide-react";
+import { Bell, AlertCircle, Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useToast } from "@/hooks/use-toast";
+import { useMutation, useQuery } from "@tanstack/react-query";
+
+type NotificationType = 'exposure' | 'test_result' | 'reminder';
+
+interface NotificationFormData {
+  testResult: string;
+  type: NotificationType;
+}
 
 export default function Notifications() {
-  const form = useForm();
+  const { toast } = useToast();
+  const form = useForm<NotificationFormData>();
 
-  const onSubmit = async (data: any) => {
-    // Handle notification sending through the database
+  const sendNotification = useMutation({
+    mutationFn: async (data: NotificationFormData) => {
+      const response = await fetch("/api/notifications", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: data.type,
+          senderPingPin: "YOUR_PP", // You would get this from user context
+          recipientPingPin: "RECIPIENT_PP", // This would come from selected contacts
+          context: {
+            testType: data.testResult,
+            date: new Date().toISOString(),
+          },
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(await response.text());
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: "Notification Sent",
+        description: "Your anonymous notification has been sent successfully.",
+      });
+      form.reset();
+    },
+    onError: (error) => {
+      toast({
+        title: "Error",
+        description: "Failed to send notification. Please try again.",
+        variant: "destructive",
+      });
+    },
+  });
+
+  const { data: recentNotifications, isLoading } = useQuery({
+    queryKey: ["/api/notifications/YOUR_PP"], // Replace with actual PP
+  });
+
+  const onSubmit = (data: NotificationFormData) => {
+    sendNotification.mutate(data);
   };
 
   return (
@@ -20,15 +72,39 @@ export default function Notifications() {
 
       <Card>
         <CardHeader>
-          <CardTitle>Report Test Result</CardTitle>
+          <CardTitle>Send Anonymous Notification</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground mb-4">
-            Your report will automatically notify relevant contacts anonymously through our system.
-            No personal information will be shared.
+            Our AI will help generate an appropriate, sensitive message. Your identity will remain anonymous.
           </p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="type"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Notification Type</FormLabel>
+                    <Select onValueChange={field.onChange} defaultValue={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Select notification type" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="exposure">Exposure Alert</SelectItem>
+                        <SelectItem value="test_result">Test Result</SelectItem>
+                        <SelectItem value="reminder">Health Reminder</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    <FormDescription>
+                      Choose the type of notification to send. Our AI will generate an appropriate message.
+                    </FormDescription>
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="testResult"
@@ -52,13 +128,24 @@ export default function Notifications() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full bg-primary">
-                <AlertCircle className="mr-2 h-4 w-4" />
-                Send Anonymous Notifications
+
+              <Button 
+                type="submit" 
+                className="w-full" 
+                disabled={sendNotification.isPending}
+              >
+                {sendNotification.isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <AlertCircle className="mr-2 h-4 w-4" />
+                    Send Anonymous Notification
+                  </>
+                )}
               </Button>
-              <p className="text-xs text-muted-foreground text-center mt-2">
-                This will notify all relevant parties from your recent PPs.
-              </p>
             </form>
           </Form>
         </CardContent>
@@ -66,34 +153,33 @@ export default function Notifications() {
 
       <div className="space-y-4">
         <h2 className="text-xl font-semibold">Recent Notifications</h2>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-4">
-              <Bell className="h-6 w-6 text-primary" />
-              <div>
-                <p className="font-medium">New Exposure Alert</p>
-                <p className="text-sm text-muted-foreground">
-                  Anonymous Alert • 2 hours ago
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center space-x-4">
-              <Bell className="h-6 w-6 text-primary" />
-              <div>
-                <p className="font-medium">Health Update Required</p>
-                <p className="text-sm text-muted-foreground">
-                  System Notification • 1 day ago
-                </p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+        {isLoading ? (
+          <div className="flex justify-center p-4">
+            <Loader2 className="h-6 w-6 animate-spin" />
+          </div>
+        ) : recentNotifications?.length === 0 ? (
+          <Card>
+            <CardContent className="p-4 text-center text-muted-foreground">
+              No notifications yet
+            </CardContent>
+          </Card>
+        ) : (
+          recentNotifications?.map((notification: any) => (
+            <Card key={notification.id}>
+              <CardContent className="p-4">
+                <div className="flex items-center space-x-4">
+                  <Bell className="h-6 w-6 text-primary" />
+                  <div>
+                    <p className="font-medium">{notification.content.message}</p>
+                    <p className="text-sm text-muted-foreground">
+                      {new Date(notification.createdAt).toLocaleDateString()}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))
+        )}
       </div>
     </div>
   );
