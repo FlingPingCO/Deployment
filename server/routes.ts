@@ -182,41 +182,40 @@ export function registerRoutes(app: Express): Server {
         ORDER BY dates.date ASC;
       `);
 
-      // Generate sample data for demographics
+      // Generate sample data for demographics with fixed counts
       const demographicData = showDemographics ? await db.execute(sql`
         WITH total_notifications AS (
           SELECT COUNT(*)::integer as total
           FROM notifications
           WHERE created_at > now() - interval '${sql.raw(days.toString())} days'
+        ),
+        age_ranges AS (
+          SELECT *
+          FROM (
+            VALUES 
+              ('18-24', 0.25),
+              ('25-34', 0.35),
+              ('35-44', 0.20),
+              ('45-54', 0.15),
+              ('55+', 0.05)
+          ) as d(range, percentage)
         )
         SELECT 
-          d.age_range as range,
+          ar.range,
           GREATEST(
-            CEIL(d.percentage * NULLIF(tn.total, 0))::integer,
+            ROUND(ar.percentage * COALESCE(NULLIF(tn.total, 0), 10))::integer,
             1
           ) as count
-        FROM (
-          VALUES 
-            ('18-24', 0.25),
-            ('25-34', 0.35),
-            ('35-44', 0.20),
-            ('45-54', 0.15),
-            ('55+', 0.05)
-        ) as d(age_range, percentage)
-        CROSS JOIN total_notifications tn
-        ORDER BY 
-          CASE d.age_range
-            WHEN '18-24' THEN 1
-            WHEN '25-34' THEN 2
-            WHEN '35-44' THEN 3
-            WHEN '45-54' THEN 4
-            WHEN '55+' THEN 5
-          END;
+        FROM age_ranges ar
+        CROSS JOIN total_notifications tn;
       `) : null;
+
+      // Log the data being sent
+      console.log('Demographics Data:', demographicData?.rows);
 
       res.json({
         notifications: notificationTrends.rows,
-        demographics: demographicData?.rows || null,
+        demographics: demographicData?.rows || [],
         location: null
       });
     } catch (error) {
