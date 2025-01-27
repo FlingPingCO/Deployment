@@ -1,0 +1,185 @@
+## **FlingPing.co App Description for Replit Agent**
+
+FlingPing.co is a privacy-focused app designed to help individuals safely and discreetly notify past sexual partners about potential STD/STI exposure. The app emphasizes anonymity, privacy, and security, creating a stigma-free platform for STD/STI prevention and awareness. The goal is to streamline communication, making it as stress-free and fun as possible, while promoting responsible health practices.
+
+---
+
+### **Core Features & Functionality**
+
+1. **Anonymous Notifications**
+    - Users can input their STD/STI test results or exposure data and choose to send **anonymous notifications** to past partners.
+    - Notifications are automated and do not reveal the sender’s identity or contact information.
+    - The system should support multiple recipients and track whether the message has been delivered or opened.
+    - The system should not ask for other partners contact information as the whole point is anonymity.
+    - The system should be able to recall past partners and be able to notify them and any of their previous partners upon the result of a positive test and an exposure.
+    - Notifications must be sent through the database and never directly to the person.
+    - Users will not input or store personal information like names, phone numbers, or emails for sending notifications. All identifiers are strictly anonymous.
+    - The **Ping Pin (PP)** serves as the sole identifier for sending and receiving notifications, ensuring complete anonymity.
+2. **Real-Time Data Updates**
+    - Users receive alerts if someone they’ve been exposed to reports a positive test, anonymously.
+    - AI automations ensure users are informed instantly to take precautions.
+3. **Educational Content**
+    - Provide bite-sized, actionable health resources about STDs/STIs, safe practices, and prevention.
+    - Include FAQ sections, testing location finders, and links to clinics.
+4. **Dashboard/Home**
+    - Display a quick overview of the user’s health status, notifications, and recommendations for testing or prevention.
+    - Include engaging and user-friendly visualizations like health status indicators and recent activity.
+5. **Profile & Settings**
+    - Users can manage their personal information (e.g., gender, age, sexual activity settings) and privacy preferences.
+    - Include robust **data security** options to reassure users that their information is private and encrypted.
+6. **Gamification & Rewards (Optional)**
+    - Encourage regular health check-ins and testing by awarding users badges or rewards.
+    - Include shareable achievements to spread awareness without stigma.
+    - Regular health check-ins and notifications for users will be rewarded with badges or points.
+    - Encourages users to share achievements in a fun, stigma-free manner.
+7. **Privacy Controls**
+    - Emphasize privacy in every interaction, with opt-in/opt-out features for all data sharing.
+    - Allow users to delete data and control what is retained by the app.
+
+---
+
+### **Privacy and Security Guidelines**
+
+1. **Privacy-First Design:**
+    - **No personal data** like names, phone numbers, or email addresses should ever be stored or used in the app for notifications.
+    - Users will assign and track their **Ping Pin (PP)**, which acts as an anonymous identifier in all communication.
+    - The entire process, from notification to tracking, must maintain complete anonymity, ensuring that no traceable information is stored or shared.
+2. **Database-Only Notifications:**
+    - All notifications should go through the database, ensuring that no identifying data is ever sent directly to the recipient.
+    - The system will use the PP to track and manage notifications, delivering alerts without revealing any personal information.
+
+---
+
+### **Design Requirements**
+
+Please follow brand book:
+
+<aside>
+🚨
+
+### Brand Guide:
+
+[FlingPing.co: Brand Guidelines](https://www.notion.so/FlingPing-co-Brand-Guidelines-16ca4c4666f9813a867ecd0f307b8da1?pvs=21) 
+
+[FlingPing.co_Brand_Guide_Lines_012724.pdf](attachment:69425b56-4096-4aa5-b975-e8c2582f4aab:FlingPing.co_Brand_Guide_Lines_012724.pdf)
+
+</aside>
+
+- **UI Style:**
+    - Modern, clean, and slightly playful to reduce stigma around the subject matter.
+    - Please use the following brand guide lines for UI Design:
+- **UX Philosophy:**
+    - Focus on simplicity and intuitiveness—users should never feel overwhelmed.
+    - Incorporate humor and light-hearted language while ensuring sensitivity. Example phrases like:
+        - “Pound your PP”
+        - “Accountability, not awkwardness”
+        - “Keep things fun and safe”
+
+---
+
+### **Brand Guidelines**
+
+1. **Brand Voice and Tone:**
+    - All interactions, notifications, and copy should align with FlingPing.co’s brand: playful, cheeky, modern, and responsible.
+    - Use friendly, approachable language to maintain a stigma-free atmosphere. Avoid clinical or judgmental tones.
+    
+    **Example Phrases:**
+    
+    - “Pound your PP”
+    - “Accountability, not awkwardness”
+    - “Keep it casual, keep it safe”
+2. **User Experience:**
+    - Make the app fun, easy to use, and welcoming.
+    - Incorporate onboarding tips that educate users without overwhelming them.
+
+---
+
+### **Key Screens & Components**
+
+1. **Home/Dashboard:**
+    - Health status overview with health reminders.
+    - Quick links to key actions: Notify Partners, Check Resources, Find Testing Locations.
+2. **Profile Page:**
+    - Personal info and settings, including test history and privacy controls.
+3. **Alerts/Notifications Page:**
+    - Show new alerts about potential exposure, action recommendations, and testing reminders.
+    - Allow users to mark notifications as resolved.
+4. **Educational Resources Page:**
+    - A clean, searchable library of content broken into categories like “Prevention,” “Treatment,” and “Testing Locations.”
+5. **Settings/Privacy Control Page:**
+    - Includes notification preferences, data privacy settings, and account management options.
+
+---
+
+### **Technical Requirements**
+
+1. **Mobile-First Design:**
+    - The app should prioritize a responsive mobile UI/UX while also being accessible via web.
+    - **Mobile Compatibility:**
+        - The app must be compatible with both **iOS and Android** platforms, with a mobile-first approach.
+        - Ensure that the UI is clean, intuitive, and mirrors the web experience seamlessly.
+2. **AI Automation:**
+    - Build a system for auto-generating anonymous notifications.
+    - Use AI to ensure notifications are personalized yet professional (without identifying details).
+3. **Database:**
+    - Securely store user data, including test history and notifications sent.
+    - Implement end-to-end encryption and anonymized storage to ensure data privacy.
+4. **APIs:**
+    - Integration with third-party APIs for STD testing locations, clinics, or telehealth services.
+5. **Gamification:**
+    - Incorporate a simple point system or badge rewards for positive actions like testing and notifying partners.
+6. **PP Assignment**: Each user gets a unique Ping Pin (PP) for anonymity.
+7. **Anonymous Notifications**: No personal data, only PP identifiers.
+8. **Privacy Settings**: Easy-to-use options to manage notifications, account details, and privacy preferences.
+
+---
+
+### **Development Goals**
+
+The primary goal is to build a **Minimum Viable Product (MVP)** that includes:
+
+**Pre-Launch Website:**
+
+1. **Founding Flinger Packages:**
+    - The website must go live ASAP to generate buzz and funding for the app.
+    - Focus on exclusivity and value for early adopters (perks, swag, shout-outs).
+    - Clear call-to-action (CTA) for sign-up and securing their spot as a founding member.
+2. **Website Design:**
+    - Clean, simple design that aligns with the app’s future UI.
+    - Focus on selling the value of being an early adopter.
+    - Include easy-to-understand CTAs for joining the movement and securing their spot.
+- Anonymous notifications.
+- User dashboard.
+- Alerts/notifications page.
+- Educational content.
+- Profile and settings management.
+
+If the Replit Agent can fully build the UI/UX, ensure the app adheres to industry best practices for accessibility, usability, and compliance with health data standards (e.g., HIPAA, GDPR).
+
+---
+
+### **PSA for Replit Agent**
+
+**FlingPing.co Development Guidelines**
+
+We’re building FlingPing.co to revolutionize how casual connections stay safe, stress-free, and discreet. The system must be designed with privacy, anonymity, and security at its core. Here are the key guidelines for implementation:
+
+1. **Notifications via Database**
+    
+    All notifications must go through the database, ensuring complete anonymity. No personal information about flings should be input or stored for notifications. The Ping Pin (PP) serves as the sole identifier.
+    
+2. **Privacy-First Design**
+    
+    The app should never ask for personal details like names or phone numbers. Users should feel confident that their information is always private and secure.
+    
+3. **Platform Support**
+    
+    The app must be developed for both iOS and Android compatibility with a responsive mobile UI that reflects the web version.
+    
+4. **Brand Voice and User Experience**
+    
+    All interactions should be playful, cheeky, and fun while maintaining a sense of responsibility and security.
+    
+5. **Pre-Launch Website**
+    
+    A Founding Flinger Packages website should go live ASAP to generate buzz, secure funding, and attract early adopters.
