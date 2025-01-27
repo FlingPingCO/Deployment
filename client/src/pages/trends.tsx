@@ -72,20 +72,6 @@ export default function Trends() {
           <div className="grid gap-6 md:grid-cols-2">
             <div className="space-y-4">
               <div className="flex items-center justify-between">
-                <Label htmlFor="location-data" className="flex flex-col gap-1">
-                  <span>Location Data</span>
-                  <span className="font-normal text-sm text-muted-foreground">
-                    Include regional trends (aggregated by city)
-                  </span>
-                </Label>
-                <Switch
-                  id="location-data"
-                  checked={showLocation}
-                  onCheckedChange={setShowLocation}
-                />
-              </div>
-
-              <div className="flex items-center justify-between">
                 <Label htmlFor="demographics" className="flex flex-col gap-1">
                   <span>Demographics</span>
                   <span className="font-normal text-sm text-muted-foreground">
@@ -115,7 +101,6 @@ export default function Trends() {
                   </SelectContent>
                 </Select>
               </div>
-
               <div className="flex items-center justify-between">
                 <Label htmlFor="granularity">Data Granularity</Label>
                 <Select
