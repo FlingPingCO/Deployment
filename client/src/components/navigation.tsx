@@ -2,8 +2,14 @@ import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/components/ui/navigation-menu";
 import { Heart, Bell, BookOpen, Home, BarChart } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
 export default function Navigation() {
+  // Check if user is admin
+  const { data: profile } = useQuery<any>({
+    queryKey: ["/api/profile"],
+  });
+
   return (
     <header className="border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-14 items-center">
@@ -39,14 +45,17 @@ export default function Navigation() {
                 </Button>
               </Link>
             </NavigationMenuItem>
-            <NavigationMenuItem>
-              <Link href="/analytics">
-                <Button variant="ghost" size="sm">
-                  <BarChart className="mr-2 h-4 w-4" />
-                  Analytics
-                </Button>
-              </Link>
-            </NavigationMenuItem>
+            {/* Only show analytics for admin users */}
+            {profile?.isAdmin && (
+              <NavigationMenuItem>
+                <Link href="/analytics">
+                  <Button variant="ghost" size="sm">
+                    <BarChart className="mr-2 h-4 w-4" />
+                    Analytics
+                  </Button>
+                </Link>
+              </NavigationMenuItem>
+            )}
           </NavigationMenuList>
         </NavigationMenu>
       </div>

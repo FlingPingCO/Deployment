@@ -8,6 +8,7 @@ export const profiles = pgTable("profiles", {
   healthStatus: jsonb("health_status"),
   preferences: jsonb("preferences"),
   tutorialComplete: boolean("tutorial_complete").default(false),
+  isAdmin: boolean("is_admin").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });

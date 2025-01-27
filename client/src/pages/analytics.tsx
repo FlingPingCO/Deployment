@@ -13,6 +13,8 @@ import {
   Cell,
 } from "recharts";
 import { Shield, Bell, Award, Users } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { useLocation } from "wouter";
 
 // Sample data - will be replaced with real API data
 const notificationData = [
@@ -30,6 +32,23 @@ const testResultsData = [
 const COLORS = ["hsl(var(--primary))", "hsl(var(--muted))"];
 
 export default function Analytics() {
+  const [, setLocation] = useLocation();
+
+  // Check if user is admin
+  const { data: profile, isLoading } = useQuery<any>({
+    queryKey: ["/api/profile"],
+  });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  // Redirect non-admin users to home page
+  if (!profile?.isAdmin) {
+    setLocation("/");
+    return null;
+  }
+
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
