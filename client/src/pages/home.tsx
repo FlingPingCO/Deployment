@@ -1,65 +1,45 @@
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Link } from "wouter";
 import { Heart, Shield, Zap } from "lucide-react";
 import OnboardingTutorial from "@/components/onboarding/OnboardingTutorial";
 import { useState } from "react";
 
 export default function Home() {
-  const [showTutorial, setShowTutorial] = useState(true); // We'll update this based on profile later
+  const [showTutorial, setShowTutorial] = useState(true); 
 
   return (
     <>
       <OnboardingTutorial open={showTutorial} onOpenChange={setShowTutorial} />
 
-      <div className="flex flex-col items-center max-w-4xl mx-auto text-center">
-        <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl mb-4">
-          Flip the Script on Sexual Health
-        </h1>
-        <p className="text-2xl font-semibold text-primary mb-4">
-          The First App to Outsmart STDs – Smart, Private, and Empowering
-        </p>
-        <p className="text-lg text-muted-foreground mb-8 max-w-[750px]">
-          Say goodbye to awkward "uh-oh" moments and hello to a smarter, safer, and discreet way 
-          to stay ahead of your sexual health.
-        </p>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F4E9D9]/30">
+        <div className="max-w-4xl mx-auto text-center space-y-6">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold">
+            Welcome to
+          </h1>
 
-        <Link href="/founding-flinger">
-          <Button size="lg" className="mb-12">
-            Join the Revolution - Only 250 Spots!
-          </Button>
-        </Link>
+          <div className="text-5xl sm:text-6xl md:text-7xl font-medium">
+            <span className="logo-text logo-main">FlingPing</span>
+            <span className="logo-text logo-suffix">.co</span>
+          </div>
 
-        <div className="grid gap-8 md:grid-cols-3 w-full">
-          <Card>
-            <CardHeader>
-              <Zap className="w-12 h-12 mb-4 text-primary mx-auto" />
-              <CardTitle>Stay Smart</CardTitle>
-            </CardHeader>
-            <CardContent>
-              Take charge with cutting-edge technology. No awkward texts, no forgotten names, just confidence.
-            </CardContent>
-          </Card>
+          <h2 className="text-xl sm:text-2xl md:text-3xl mt-4">
+            The First App to Outsmart STDs: {" "}
+            <span className="text-[#0ACCA8] underline decoration-[#0ACCA8] underline-offset-4">Smart</span>,{" "}
+            <span className="text-[#FF695E] underline decoration-[#FF695E] underline-offset-4">Private</span>, and{" "}
+            <span className="text-[#FFD166] underline decoration-[#FFD166] underline-offset-4">Empowering</span>.
+          </h2>
 
-          <Card>
-            <CardHeader>
-              <Shield className="w-12 h-12 mb-4 text-primary mx-auto" />
-              <CardTitle>Stay Private</CardTitle>
-            </CardHeader>
-            <CardContent>
-              Keep your personal life personal with encrypted, anonymous communication. No names, no numbers—just peace of mind.
-            </CardContent>
-          </Card>
+          <h3 className="text-2xl font-bold mt-8">
+            Revolutionize Your Health Journey: Get Lifetime Access Now!
+          </h3>
 
-          <Card>
-            <CardHeader>
-              <Heart className="w-12 h-12 mb-4 text-primary mx-auto" />
-              <CardTitle>Stay Fun</CardTitle>
-            </CardHeader>
-            <CardContent>
-              Who knew safe sex could be this empowering? Confidence never looked so good.
-            </CardContent>
-          </Card>
+          <Link href="/founding-flinger">
+            <Button 
+              className="mt-8 bg-[#FF695E] hover:bg-[#FF695E]/90 text-white px-8 py-6 text-lg rounded-full shadow-lg"
+            >
+              JOIN NOW!
+            </Button>
+          </Link>
         </div>
       </div>
     </>
