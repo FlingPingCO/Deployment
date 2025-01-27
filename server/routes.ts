@@ -164,91 +164,57 @@ export function registerRoutes(app: Express): Server {
       };
       const days = daysMap[timeRange as string] || 30;
 
-      // Base notification trends query with proper date formatting
+      // Get notification trends with actual counts
       const notificationTrends = await db.execute(sql`
         WITH RECURSIVE dates AS (
           SELECT generate_series(
-            date_trunc('day', now()) - interval '${sql.raw(days.toString())} days',
-            date_trunc('day', now()),
+            now() - interval '${sql.raw(days.toString())} days',
+            now(),
             interval '1 day'
-          )::timestamp as date
+          )::date as date
         )
         SELECT 
-          to_char(dates.date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as date,
+          to_char(dates.date, 'YYYY-MM-DD"T"00:00:00Z"') as date,
           COALESCE(COUNT(n.id), 0)::integer as count
         FROM dates
-        LEFT JOIN notifications n ON date_trunc('day', n.created_at) = dates.date
+        LEFT JOIN notifications n ON date_trunc('day', n.created_at)::date = dates.date
         GROUP BY dates.date
         ORDER BY dates.date ASC;
       `);
 
-      // Optional demographic data
-      let demographicData = null;
-      if (showDemographics) {
-        demographicData = await db.execute(sql`
-          WITH demo_data AS (
-            SELECT COUNT(*) as total_count
-            FROM notifications
-            WHERE created_at > now() - interval '${sql.raw(days.toString())} days'
-          )
-          SELECT 
-            age_range as range,
-            CASE 
-              WHEN dd.total_count = 0 THEN 1
-              ELSE GREATEST(FLOOR(dd.total_count * percentage)::integer, 1)
-            END as count
-          FROM (
-            VALUES 
-              ('18-24', 0.25),
-              ('25-34', 0.35),
-              ('35-44', 0.20),
-              ('45-54', 0.15),
-              ('55+', 0.05)
-          ) ranges(age_range, percentage)
-          CROSS JOIN demo_data dd
-          ORDER BY 
-            CASE age_range
-              WHEN '18-24' THEN 1
-              WHEN '25-34' THEN 2
-              WHEN '35-44' THEN 3
-              WHEN '45-54' THEN 4
-              WHEN '55+' THEN 5
-            END;
-        `);
-      }
-
-      // Optional location data
-      let locationData = null;
-      if (showLocation) {
-        locationData = await db.execute(sql`
-          WITH loc_data AS (
-            SELECT COUNT(*) as total_count
-            FROM notifications
-            WHERE created_at > now() - interval '${sql.raw(days.toString())} days'
-          )
-          SELECT 
-            city,
-            CASE 
-              WHEN ld.total_count = 0 THEN 1
-              ELSE GREATEST(FLOOR(ld.total_count * percentage)::integer, 1)
-            END as count
-          FROM (
-            VALUES 
-              ('San Francisco', 0.30),
-              ('Los Angeles', 0.25),
-              ('New York', 0.20),
-              ('Chicago', 0.15),
-              ('Miami', 0.10)
-          ) cities(city, percentage)
-          CROSS JOIN loc_data ld
-          ORDER BY count DESC;
-        `);
-      }
+      // Generate sample data for demographics
+      const demographicData = showDemographics ? await db.execute(sql`
+        WITH notification_count AS (
+          SELECT GREATEST(COUNT(*), 5)::integer as total
+          FROM notifications
+          WHERE created_at > now() - interval '${sql.raw(days.toString())} days'
+        )
+        SELECT 
+          age_range as range,
+          (CEIL(percentage * nc.total))::integer as count
+        FROM (
+          VALUES 
+            ('18-24', 0.25),
+            ('25-34', 0.35),
+            ('35-44', 0.20),
+            ('45-54', 0.15),
+            ('55+', 0.05)
+        ) as d(age_range, percentage)
+        CROSS JOIN notification_count nc
+        ORDER BY 
+          CASE age_range
+            WHEN '18-24' THEN 1
+            WHEN '25-34' THEN 2
+            WHEN '35-44' THEN 3
+            WHEN '45-54' THEN 4
+            WHEN '55+' THEN 5
+          END;
+      `) : null;
 
       res.json({
         notifications: notificationTrends.rows,
         demographics: demographicData?.rows || null,
-        location: locationData?.rows || null,
+        location: null, // We'll keep this simple for now
       });
     } catch (error) {
       console.error('Error fetching trends:', error);

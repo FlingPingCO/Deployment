@@ -23,9 +23,9 @@ type DataGranularity = "daily" | "weekly" | "monthly";
 
 export default function Trends() {
   const [timeRange, setTimeRange] = useState<TimeRange>("30d");
-  const [granularity, setGranularity] = useState<DataGranularity>("weekly");
+  const [granularity, setGranularity] = useState<DataGranularity>("daily");
   const [showLocation, setShowLocation] = useState(false);
-  const [showDemographics, setShowDemographics] = useState(false);
+  const [showDemographics, setShowDemographics] = useState(true);
 
   const { data: trendsData, isLoading, error } = useQuery<any>({
     queryKey: ["/api/trends", { timeRange, granularity, showLocation, showDemographics }],
@@ -33,7 +33,7 @@ export default function Trends() {
 
   const formatDate = (dateStr: string) => {
     try {
-      return format(parseISO(dateStr), granularity === 'daily' ? 'MMM d' : 'MMM d, yyyy');
+      return format(parseISO(dateStr), "MMM d");
     } catch (e) {
       return dateStr;
     }
@@ -157,14 +157,20 @@ export default function Trends() {
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={trendsData?.notifications || []}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis 
-                      dataKey="date" 
+                    <XAxis
+                      dataKey="date"
                       tickFormatter={formatDate}
+                      stroke="hsl(var(--foreground))"
                     />
-                    <YAxis />
-                    <Tooltip 
-                      labelFormatter={(label) => formatDate(label as string)}
-                      formatter={(value) => [value, "Notifications"]}
+                    <YAxis stroke="hsl(var(--foreground))" />
+                    <Tooltip
+                      labelFormatter={formatDate}
+                      contentStyle={{
+                        backgroundColor: 'hsl(var(--popover))',
+                        border: '1px solid hsl(var(--border))',
+                        borderRadius: 'var(--radius)',
+                        color: 'hsl(var(--foreground))',
+                      }}
                     />
                     <Line
                       type="monotone"
@@ -173,6 +179,7 @@ export default function Trends() {
                       strokeWidth={2}
                       dot={false}
                       activeDot={{ r: 6 }}
+                      isAnimationActive={false}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -190,50 +197,26 @@ export default function Trends() {
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={trendsData.demographics}>
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis 
+                      <XAxis
                         dataKey="range"
-                        tick={{ fill: 'hsl(var(--foreground))' }}
+                        stroke="hsl(var(--foreground))"
                       />
-                      <YAxis 
-                        tick={{ fill: 'hsl(var(--foreground))' }}
-                      />
-                      <Tooltip 
+                      <YAxis stroke="hsl(var(--foreground))" />
+                      <Tooltip
                         formatter={(value) => [`${value} Users`, "Count"]}
                         contentStyle={{
                           backgroundColor: 'hsl(var(--popover))',
                           border: '1px solid hsl(var(--border))',
                           borderRadius: 'var(--radius)',
-                        }}
-                        labelStyle={{
                           color: 'hsl(var(--foreground))',
                         }}
                       />
-                      <Bar 
-                        dataKey="count" 
+                      <Bar
+                        dataKey="count"
                         fill="hsl(var(--primary))"
                         radius={[4, 4, 0, 0]}
+                        isAnimationActive={false}
                       />
-                    </BarChart>
-                  </ResponsiveContainer>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {showLocation && trendsData?.location && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Geographic Distribution</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="h-[400px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={trendsData.location} layout="vertical">
-                      <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis type="number" />
-                      <YAxis dataKey="city" type="category" width={100} />
-                      <Tooltip formatter={(value) => [value, "Users"]} />
-                      <Bar dataKey="count" fill="hsl(var(--primary))" />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
