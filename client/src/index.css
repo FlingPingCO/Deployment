@@ -11,31 +11,65 @@
     @apply font-sans antialiased bg-background text-foreground;
   }
 
-  /* Brand Typography */
+  /* Bold, Empowering Typography */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-bold tracking-tight;
+    @apply font-extrabold tracking-tight;
   }
 
   h1 {
-    @apply text-4xl md:text-5xl lg:text-6xl;
+    @apply text-5xl md:text-6xl lg:text-7xl leading-none;
+    letter-spacing: -0.02em;
   }
 
   h2 {
-    @apply text-3xl md:text-4xl;
+    @apply text-3xl md:text-4xl lg:text-5xl leading-tight;
+    letter-spacing: -0.01em;
   }
 
-  /* Brand Button Styles */
+  /* Empowering Button Styles */
   .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-colors;
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 
+           font-bold uppercase tracking-wide transition-all 
+           transform hover:scale-105 hover:shadow-lg;
   }
 
-  /* Card Enhancements */
+  /* Card Styles - Bold & Confident */
   .card {
-    @apply hover:shadow-lg transition-shadow duration-200;
+    @apply hover:shadow-xl transition-all duration-300 
+           border-2 hover:border-primary/20;
+  }
+
+  /* Stay Smart, Stay Private Section Styles */
+  .feature-section {
+    @apply relative overflow-hidden rounded-2xl 
+           bg-gradient-to-br from-primary/5 to-primary/10
+           p-8 transition-all duration-300 hover:from-primary/10 hover:to-primary/20;
+  }
+
+  /* Empowering Links */
+  .link-empowered {
+    @apply font-semibold text-primary hover:text-primary/80 
+           underline-offset-4 hover:underline transition-all;
+  }
+
+  /* Bold Call-to-Actions */
+  .cta-button {
+    @apply inline-flex items-center justify-center px-8 py-4
+           bg-primary text-primary-foreground font-bold uppercase
+           tracking-wider rounded-xl shadow-lg hover:shadow-xl
+           transform transition-all hover:-translate-y-0.5
+           hover:bg-primary/90 focus:ring-2 focus:ring-primary/50;
+  }
+
+  /* Privacy-First Component Styles */
+  .privacy-badge {
+    @apply inline-flex items-center gap-2 px-3 py-1.5
+           bg-secondary/10 text-secondary-foreground
+           rounded-full text-sm font-medium;
   }
 }
 
-/* Custom Animations */
+/* Brand Animations */
 @keyframes float {
   0% { transform: translateY(0px); }
   50% { transform: translateY(-10px); }
@@ -44,4 +78,22 @@
 
 .animate-float {
   animation: float 3s ease-in-out infinite;
+}
+
+@keyframes pulse-ring {
+  0% { transform: scale(0.95); }
+  70% { transform: scale(1); }
+  100% { transform: scale(0.95); }
+}
+
+.animate-pulse-ring {
+  animation: pulse-ring 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Privacy-First Gradient */
+.privacy-gradient {
+  background: linear-gradient(135deg, 
+    hsl(var(--primary) / 0.1) 0%,
+    hsl(var(--secondary) / 0.1) 100%
+  );
 }
