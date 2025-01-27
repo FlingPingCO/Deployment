@@ -26,6 +26,12 @@ export default function Contacts() {
             </CardTitle>
           </CardHeader>
           <CardContent>
+            <ul className="list-disc pl-6 space-y-2 text-sm">
+              <li>Each dot shows a past interaction with another FlingPing user (shown by their Ping Pin)</li>
+              <li>Larger circles mean you spent more time near that person</li>
+              <li>Click any point to see when and how long the contact lasted</li>
+            </ul>
+
             <div className="mt-4">
               <p className="text-sm">The chart above displays your proximity history with other FlingPing users:</p>
               <ul className="list-disc pl-6 space-y-2 text-sm mt-2">
@@ -47,6 +53,34 @@ export default function Contacts() {
                 </li>
               </ul>
             </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-primary" />
+              Understanding Your Contact History
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm">
+              Your contact history helps you monitor your potential exposure risk:
+            </p>
+            <ul className="list-disc pl-6 space-y-2 text-sm mt-4">
+              <li>
+                <span className="font-medium">Proximity Patterns:</span> See when and how often 
+                you're in close contact with others
+              </li>
+              <li>
+                <span className="font-medium">Risk Assessment:</span> Longer contact duration 
+                and closer proximity may indicate higher exposure risk
+              </li>
+              <li>
+                <span className="font-medium">Contact Tracing:</span> If you receive a notification, 
+                you can identify when the potential exposure occurred
+              </li>
+            </ul>
           </CardContent>
         </Card>
 
