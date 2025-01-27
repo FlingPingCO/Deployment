@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-type NotificationType = 'exposure' | 'test_result' | 'reminder';
+type NotificationType = 'exposure' | 'test_result';
 type ExposureType = 'direct' | 'indirect';
 type TestResultStatus = 'positive' | 'negative';
 
@@ -179,7 +179,6 @@ export default function Notifications() {
                       <SelectContent>
                         <SelectItem value="exposure">Report Exposure</SelectItem>
                         <SelectItem value="test_result">Report Test Result</SelectItem>
-                        <SelectItem value="reminder">Send Health Reminder</SelectItem>
                       </SelectContent>
                     </Select>
                   </FormItem>
