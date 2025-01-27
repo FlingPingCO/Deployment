@@ -7,6 +7,7 @@ export const profiles = pgTable("profiles", {
   pingPin: text("ping_pin").unique().notNull(),
   healthStatus: jsonb("health_status"),
   preferences: jsonb("preferences"),
+  tutorialComplete: boolean("tutorial_complete").default(false),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
 });
