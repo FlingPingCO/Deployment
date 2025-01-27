@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/components/ui/navigation-menu";
-import { Heart, Bell, BookOpen, Home } from "lucide-react";
+import { Heart, Bell, BookOpen, Home, BarChart } from "lucide-react";
 
 export default function Navigation() {
   return (
@@ -36,6 +36,14 @@ export default function Navigation() {
                 <Button variant="ghost" size="sm">
                   <BookOpen className="mr-2 h-4 w-4" />
                   Resources
+                </Button>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/analytics">
+                <Button variant="ghost" size="sm">
+                  <BarChart className="mr-2 h-4 w-4" />
+                  Analytics
                 </Button>
               </Link>
             </NavigationMenuItem>

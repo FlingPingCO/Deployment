@@ -9,6 +9,7 @@ import FoundingFlinger from "@/pages/founding-flinger";
 import Dashboard from "@/pages/dashboard";
 import Notifications from "@/pages/notifications";
 import Resources from "@/pages/resources";
+import Analytics from "@/pages/analytics";
 
 function Router() {
   return (
@@ -21,6 +22,7 @@ function Router() {
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/notifications" component={Notifications} />
           <Route path="/resources" component={Resources} />
+          <Route path="/analytics" component={Analytics} />
           <Route component={NotFound} />
         </Switch>
       </main>
