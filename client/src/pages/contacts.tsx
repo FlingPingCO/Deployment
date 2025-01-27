@@ -16,7 +16,17 @@ export default function Contacts() {
       </div>
 
       <div className="grid gap-6">
-        <ContactTrace />
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <AlertCircle className="h-5 w-5 text-primary" />
+              Reading Your Contact History
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ContactTrace />
+          </CardContent>
+        </Card>
 
         <Card>
           <CardHeader>
