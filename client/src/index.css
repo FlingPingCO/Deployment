@@ -10,4 +10,38 @@
   body {
     @apply font-sans antialiased bg-background text-foreground;
   }
+
+  /* Brand Typography */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  /* Brand Button Styles */
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:bg-primary/90 transition-colors;
+  }
+
+  /* Card Enhancements */
+  .card {
+    @apply hover:shadow-lg transition-shadow duration-200;
+  }
+}
+
+/* Custom Animations */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
 }
