@@ -162,9 +162,13 @@ export default function Trends() {
                       tickFormatter={formatDate}
                       stroke="hsl(var(--foreground))"
                     />
-                    <YAxis stroke="hsl(var(--foreground))" />
+                    <YAxis
+                      stroke="hsl(var(--foreground))"
+                      allowDecimals={false}
+                    />
                     <Tooltip
                       labelFormatter={formatDate}
+                      formatter={(value) => [`${value} Notifications`, "Count"]}
                       contentStyle={{
                         backgroundColor: 'hsl(var(--popover))',
                         border: '1px solid hsl(var(--border))',
@@ -179,7 +183,6 @@ export default function Trends() {
                       strokeWidth={2}
                       dot={false}
                       activeDot={{ r: 6 }}
-                      isAnimationActive={false}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -201,7 +204,10 @@ export default function Trends() {
                         dataKey="range"
                         stroke="hsl(var(--foreground))"
                       />
-                      <YAxis stroke="hsl(var(--foreground))" />
+                      <YAxis
+                        stroke="hsl(var(--foreground))"
+                        allowDecimals={false}
+                      />
                       <Tooltip
                         formatter={(value) => [`${value} Users`, "Count"]}
                         contentStyle={{
@@ -215,7 +221,6 @@ export default function Trends() {
                         dataKey="count"
                         fill="hsl(var(--primary))"
                         radius={[4, 4, 0, 0]}
-                        isAnimationActive={false}
                       />
                     </BarChart>
                   </ResponsiveContainer>

@@ -150,7 +150,7 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
-  // Trends endpoint with privacy controls
+  // Updated trends endpoint
   app.get('/api/trends', async (req, res) => {
     try {
       const { timeRange = '30d', granularity = 'weekly', showLocation = false, showDemographics = false } = req.query;
@@ -175,7 +175,7 @@ export function registerRoutes(app: Express): Server {
         )
         SELECT 
           to_char(dates.date, 'YYYY-MM-DD"T"00:00:00Z"') as date,
-          COALESCE(COUNT(n.id), 0)::integer as count
+          COUNT(n.id)::integer as count
         FROM dates
         LEFT JOIN notifications n ON date_trunc('day', n.created_at)::date = dates.date
         GROUP BY dates.date
@@ -184,14 +184,17 @@ export function registerRoutes(app: Express): Server {
 
       // Generate sample data for demographics
       const demographicData = showDemographics ? await db.execute(sql`
-        WITH notification_count AS (
-          SELECT GREATEST(COUNT(*), 5)::integer as total
+        WITH total_notifications AS (
+          SELECT COUNT(*)::integer as total
           FROM notifications
           WHERE created_at > now() - interval '${sql.raw(days.toString())} days'
         )
         SELECT 
-          age_range as range,
-          (CEIL(percentage * nc.total))::integer as count
+          d.age_range as range,
+          GREATEST(
+            CEIL(d.percentage * NULLIF(tn.total, 0))::integer,
+            1
+          ) as count
         FROM (
           VALUES 
             ('18-24', 0.25),
@@ -200,9 +203,9 @@ export function registerRoutes(app: Express): Server {
             ('45-54', 0.15),
             ('55+', 0.05)
         ) as d(age_range, percentage)
-        CROSS JOIN notification_count nc
+        CROSS JOIN total_notifications tn
         ORDER BY 
-          CASE age_range
+          CASE d.age_range
             WHEN '18-24' THEN 1
             WHEN '25-34' THEN 2
             WHEN '35-44' THEN 3
@@ -214,34 +217,13 @@ export function registerRoutes(app: Express): Server {
       res.json({
         notifications: notificationTrends.rows,
         demographics: demographicData?.rows || null,
-        location: null, // We'll keep this simple for now
+        location: null
       });
     } catch (error) {
       console.error('Error fetching trends:', error);
       res.status(500).json({ error: 'Failed to fetch trends data' });
     }
   });
-
-
-  //Removing the old trends endpoint
-  // app.get('/api/analytics/trends', async (req, res) => {
-  //   try {
-  //     const notificationTrends = await db.execute(sql`
-  //       SELECT date_trunc('day', created_at) as date,
-  //              count(*) as count
-  //       FROM notifications
-  //       WHERE created_at > now() - interval '30 days'
-  //       GROUP BY date_trunc('day', created_at)
-  //       ORDER BY date ASC
-  //     `);
-  //
-  //     res.json({
-  //       notifications: notificationTrends.rows,
-  //     });
-  //   } catch (error) {
-  //     res.status(500).json({ error: 'Failed to fetch analytics trends' });
-  //   }
-  // });
 
   const httpServer = createServer(app);
   return httpServer;
