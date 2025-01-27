@@ -62,7 +62,7 @@ export default function Contacts() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <AlertCircle className="h-5 w-5 text-primary" />
-              Understanding Your Contact History
+              Contact History Explained
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
