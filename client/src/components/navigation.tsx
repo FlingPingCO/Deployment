@@ -13,11 +13,11 @@ export default function Navigation() {
     <header className="sticky top-0 z-50 border-b bg-[#3C3C3C]">
       <div className="container flex h-16 items-center">
         <Link href="/">
-          <Button variant="ghost" className="flex items-center space-x-2 px-2 group">
+          <Button variant="ghost" className="flex items-center space-x-2 px-2">
             <Heart className="h-6 w-6 text-[#0ACCA8]" />
-            <span className="text-xl">
-              <span className="font-medium text-[#0ACCA8]" style={{ fontFamily: 'Poppins' }}>FlingPing</span>
-              <span className="font-extralight text-[#FF695E]" style={{ fontFamily: 'Poppins' }}>.co</span>
+            <span className="text-xl flex items-center">
+              <span className="logo-text logo-main">FlingPing</span>
+              <span className="logo-text logo-suffix">.co</span>
             </span>
           </Button>
         </Link>
