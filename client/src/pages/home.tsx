@@ -22,14 +22,17 @@ export default function Home() {
             <span className="logo-text logo-suffix">.co</span>
           </div>
 
-          <h2 className="text-xl sm:text-2xl md:text-3xl mt-4">
-            The First App to Outsmart STDs: {" "}
-            <span className="text-[#0ACCA8] underline decoration-[#0ACCA8] underline-offset-4">Smart</span>,{" "}
-            <span className="text-[#FF695E] underline decoration-[#FF695E] underline-offset-4">Private</span>, and{" "}
-            <span className="text-[#FFD166] underline decoration-[#FFD166] underline-offset-4">Empowering</span>.
-          </h2>
+          <div className="relative py-8">
+            <p className="text-xl sm:text-2xl md:text-3xl">
+              The First App to Outsmart STDs:{" "}
+              <span className="text-[#0ACCA8] underline decoration-[#0ACCA8] underline-offset-4">Smart</span>,{" "}
+              <span className="text-[#FF695E] underline decoration-[#FF695E] underline-offset-4">Private</span>,{" "}and{" "}
+              <span className="text-[#FFD166] underline decoration-[#FFD166] underline-offset-4">Empowering</span>.
+            </p>
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-[#3C3C3C]/20"></div>
+          </div>
 
-          <h3 className="text-2xl font-bold mt-8">
+          <h3 className="text-2xl font-bold">
             Revolutionize Your Health Journey: Get Lifetime Access Now!
           </h3>
 
