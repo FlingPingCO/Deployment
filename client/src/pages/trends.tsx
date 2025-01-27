@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   LineChart,
@@ -15,8 +14,9 @@ import {
   BarChart,
   Bar,
 } from "recharts";
-import { Shield, AlertCircle } from "lucide-react";
+import { Shield, AlertCircle, Loader2 } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
+import { format, parseISO } from "date-fns";
 
 type TimeRange = "7d" | "30d" | "90d" | "1y";
 type DataGranularity = "daily" | "weekly" | "monthly";
@@ -27,9 +27,28 @@ export default function Trends() {
   const [showLocation, setShowLocation] = useState(false);
   const [showDemographics, setShowDemographics] = useState(false);
 
-  const { data: trendsData, isLoading } = useQuery<any>({
-    queryKey: ["/api/trends", timeRange, granularity, showLocation, showDemographics],
+  const { data: trendsData, isLoading, error } = useQuery<any>({
+    queryKey: ["/api/trends", { timeRange, granularity, showLocation, showDemographics }],
   });
+
+  const formatDate = (dateStr: string) => {
+    try {
+      return format(parseISO(dateStr), granularity === 'daily' ? 'MMM d' : 'MMM d, yyyy');
+    } catch (e) {
+      return dateStr;
+    }
+  };
+
+  if (error) {
+    return (
+      <Card className="p-6">
+        <div className="flex items-center justify-center text-destructive">
+          <AlertCircle className="mr-2 h-4 w-4" />
+          Error loading trends data
+        </div>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -122,7 +141,7 @@ export default function Trends() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center justify-center">
-              <AlertCircle className="mr-2 h-4 w-4 animate-pulse" />
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Loading trends data...
             </div>
           </CardContent>
@@ -136,16 +155,24 @@ export default function Trends() {
             <CardContent>
               <div className="h-[400px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={trendsData?.notifications}>
+                  <LineChart data={trendsData?.notifications || []}>
                     <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="date" />
+                    <XAxis 
+                      dataKey="date" 
+                      tickFormatter={formatDate}
+                    />
                     <YAxis />
-                    <Tooltip />
+                    <Tooltip 
+                      labelFormatter={(label) => formatDate(label as string)}
+                      formatter={(value) => [value, "Notifications"]}
+                    />
                     <Line
                       type="monotone"
                       dataKey="count"
                       stroke="hsl(var(--primary))"
                       strokeWidth={2}
+                      dot={false}
+                      activeDot={{ r: 6 }}
                     />
                   </LineChart>
                 </ResponsiveContainer>
@@ -153,7 +180,7 @@ export default function Trends() {
             </CardContent>
           </Card>
 
-          {showDemographics && (
+          {showDemographics && trendsData?.demographics && (
             <Card>
               <CardHeader>
                 <CardTitle>Age Distribution</CardTitle>
@@ -161,11 +188,32 @@ export default function Trends() {
               <CardContent>
                 <div className="h-[400px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <BarChart data={trendsData?.demographics}>
+                    <BarChart data={trendsData.demographics}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="range" />
                       <YAxis />
-                      <Tooltip />
+                      <Tooltip formatter={(value) => [value, "Users"]} />
+                      <Bar dataKey="count" fill="hsl(var(--primary))" />
+                    </BarChart>
+                  </ResponsiveContainer>
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
+          {showLocation && trendsData?.location && (
+            <Card>
+              <CardHeader>
+                <CardTitle>Geographic Distribution</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="h-[400px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <BarChart data={trendsData.location} layout="vertical">
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis type="number" />
+                      <YAxis dataKey="city" type="category" width={100} />
+                      <Tooltip formatter={(value) => [value, "Users"]} />
                       <Bar dataKey="count" fill="hsl(var(--primary))" />
                     </BarChart>
                   </ResponsiveContainer>
