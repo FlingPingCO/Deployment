@@ -32,7 +32,7 @@ export default function Home() {
             <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3/4 h-px bg-[#3C3C3C]/20"></div>
           </div>
 
-          <h3 className="text-2xl font-bold">
+          <h3 className="text-xl font-bold whitespace-nowrap">
             Revolutionize Your Health Journey: Get Lifetime Access Now!
           </h3>
 
