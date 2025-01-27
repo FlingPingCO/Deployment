@@ -212,7 +212,7 @@ export function registerRoutes(app: Express): Server {
           ) as t(age_range, percentage)
           CROSS JOIN total
           CROSS JOIN LATERAL (
-            SELECT (total.total_count * percentage)::integer as count
+            SELECT GREATEST((total.total_count * percentage)::integer, 1) as count
           ) counts
           ORDER BY range;
         `);
@@ -240,7 +240,7 @@ export function registerRoutes(app: Express): Server {
           ) as t(city, percentage)
           CROSS JOIN total
           CROSS JOIN LATERAL (
-            SELECT (total.total_count * percentage)::integer as count
+            SELECT GREATEST((total.total_count * percentage)::integer, 1) as count
           ) counts
           ORDER BY count DESC;
         `);
@@ -257,24 +257,26 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
-  app.get('/api/analytics/trends', async (req, res) => {
-    try {
-      const notificationTrends = await db.execute(sql`
-        SELECT date_trunc('day', created_at) as date,
-               count(*) as count
-        FROM notifications
-        WHERE created_at > now() - interval '30 days'
-        GROUP BY date_trunc('day', created_at)
-        ORDER BY date ASC
-      `);
 
-      res.json({
-        notifications: notificationTrends.rows,
-      });
-    } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch analytics trends' });
-    }
-  });
+  //Removing the old trends endpoint
+  // app.get('/api/analytics/trends', async (req, res) => {
+  //   try {
+  //     const notificationTrends = await db.execute(sql`
+  //       SELECT date_trunc('day', created_at) as date,
+  //              count(*) as count
+  //       FROM notifications
+  //       WHERE created_at > now() - interval '30 days'
+  //       GROUP BY date_trunc('day', created_at)
+  //       ORDER BY date ASC
+  //     `);
+
+  //     res.json({
+  //       notifications: notificationTrends.rows,
+  //     });
+  //   } catch (error) {
+  //     res.status(500).json({ error: 'Failed to fetch analytics trends' });
+  //   }
+  // });
 
   const httpServer = createServer(app);
   return httpServer;
