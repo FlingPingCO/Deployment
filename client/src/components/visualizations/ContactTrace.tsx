@@ -1,6 +1,6 @@
 import { ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, ZAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bell, Users, Info } from "lucide-react";
+import { Bell, Users, Info, Clock } from "lucide-react";
 import {
   Tooltip as UITooltip,
   TooltipContent,
@@ -27,7 +27,8 @@ export default function ContactTrace() {
     x: new Date(contact.timestamp).getHours(),
     y: contact.distance,
     z: contact.duration,
-    id: contact.id
+    id: contact.id,
+    timeAgo: Math.round((Date.now() - contact.timestamp) / (1000 * 60)) // minutes ago
   }));
 
   return (
@@ -35,8 +36,8 @@ export default function ContactTrace() {
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle className="flex items-center gap-2">
-            <Users className="h-5 w-5 text-primary" />
-            Proximity Contact Map
+            <Clock className="h-5 w-5 text-primary" />
+            24-Hour Contact History
           </CardTitle>
           <TooltipProvider>
             <UITooltip>
@@ -44,13 +45,15 @@ export default function ContactTrace() {
                 <Info className="h-4 w-4 text-muted-foreground" />
               </TooltipTrigger>
               <TooltipContent>
-                <p className="max-w-xs">
-                  This visualization shows your recent contacts:
-                  • Each point represents a contact
-                  • X-axis shows when the contact occurred
-                  • Y-axis shows how close you were
-                  • Larger bubbles mean longer contact duration
-                </p>
+                <div className="max-w-xs space-y-2">
+                  <p>This chart shows your proximity history with other FlingPing users over the last 24 hours:</p>
+                  <ul className="list-disc pl-4 text-sm">
+                    <li>Each dot represents a past contact</li>
+                    <li>Time shows when the contact occurred</li>
+                    <li>Distance shows how close you were</li>
+                    <li>Larger dots mean longer contact duration</li>
+                  </ul>
+                </div>
               </TooltipContent>
             </UITooltip>
           </TooltipProvider>
@@ -70,7 +73,7 @@ export default function ContactTrace() {
                 domain={[0, 24]}
                 tickFormatter={(hour) => `${hour}:00`}
                 label={{ 
-                  value: 'Hours (24-hour format)', 
+                  value: 'Contact Time (24-hour format)', 
                   position: 'bottom',
                   offset: 20
                 }}
@@ -81,7 +84,7 @@ export default function ContactTrace() {
                 name="Distance" 
                 unit="m"
                 label={{ 
-                  value: 'Distance (meters)', 
+                  value: 'Distance Between Users (meters)', 
                   angle: -90, 
                   position: 'left',
                   offset: 10
@@ -101,12 +104,17 @@ export default function ContactTrace() {
                   if (active && payload && payload.length) {
                     const data = payload[0].payload;
                     return (
-                      <div className="bg-background border rounded p-3 shadow-lg">
-                        <p className="font-semibold text-primary">{data.id}</p>
-                        <div className="space-y-1 mt-2 text-sm">
-                          <p>Distance: {data.y}m</p>
+                      <div className="bg-background border rounded p-4 shadow-lg">
+                        <p className="font-semibold text-primary mb-2">{data.id}</p>
+                        <div className="space-y-1 text-sm">
+                          <p>Distance: {data.y} meters</p>
                           <p>Duration: {data.z} minutes</p>
                           <p>Time: {data.x}:00</p>
+                          <p className="text-muted-foreground mt-1">
+                            {data.timeAgo < 60 
+                              ? `${data.timeAgo} minutes ago`
+                              : `${Math.round(data.timeAgo / 60)} hours ago`}
+                          </p>
                         </div>
                       </div>
                     );
@@ -115,7 +123,7 @@ export default function ContactTrace() {
                 }}
               />
               <Scatter 
-                name="Contacts" 
+                name="Past Contacts" 
                 data={formatData} 
                 fill="hsl(var(--primary))"
               />
@@ -123,19 +131,19 @@ export default function ContactTrace() {
           </ResponsiveContainer>
         </div>
         <div className="mt-6 space-y-2">
-          <h4 className="font-semibold">How to read this chart:</h4>
+          <h4 className="font-semibold">Understanding Your Contact History:</h4>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-muted-foreground">
             <div className="flex items-start gap-2">
               <div className="w-2 h-2 mt-1.5 rounded-full bg-primary" />
-              <p>Each dot represents a contact with another user (identified by their Ping Pin)</p>
+              <p>Each dot shows a past interaction with another FlingPing user (shown by their Ping Pin)</p>
             </div>
             <div className="flex items-start gap-2">
               <div className="w-4 h-4 mt-1 rounded-full bg-primary/20" />
-              <p>Larger circles indicate longer contact duration</p>
+              <p>Larger circles mean you spent more time near that person</p>
             </div>
             <div className="flex items-start gap-2">
               <div className="w-2 h-2 mt-1.5 rounded-full bg-muted" />
-              <p>Hover over any point to see detailed information</p>
+              <p>Click any point to see when and how long the contact lasted</p>
             </div>
           </div>
         </div>
