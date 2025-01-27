@@ -17,7 +17,7 @@ const FALLBACK_MESSAGES = {
         : 'Consider getting tested to confirm your status.'
     }`,
   reminder: (context: any) => 
-    "This is a friendly reminder to stay on top of your sexual health. Regular testing helps keep you and others safe.",
+    `Time for your regular health check-up! Regular testing is a crucial part of staying healthy and protecting your partners. Our records show it's been a while since your last update. Visit our Resources section for nearby testing locations and health information.`,
 };
 
 const NOTIFICATION_PROMPTS = {
@@ -36,11 +36,12 @@ const NOTIFICATION_PROMPTS = {
   - Include the specific test type and result status
   - Provide appropriate next steps based on result status`,
 
-  reminder: `Generate a friendly reminder about sexual health. The message should be:
-  - Casual and non-threatening
-  - Encouraging regular testing
-  - Positive about taking control of health
-  - Light but respectful in tone`,
+  reminder: `Generate a proactive health reminder. The message should:
+  - Emphasize the importance of regular testing
+  - Mention the benefits of staying up-to-date with sexual health
+  - Include a call to action (like visiting testing centers or checking resources)
+  - Be encouraging and supportive
+  - Maintain a professional yet friendly tone`,
 };
 
 export async function generateNotification(
