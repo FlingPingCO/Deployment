@@ -23,6 +23,16 @@ export function registerRoutes(app: Express): Server {
     });
   });
 
+  // Add endpoint to restart session
+  app.post('/api/session-restart', (req, res) => {
+    req.session.destroy((err) => {
+      if (err) {
+        return res.status(500).json({ message: 'Failed to restart session', error: err });
+      }
+      res.json({ message: 'Session restarted successfully' });
+    });
+  });
+
   // Profile routes
   app.get('/api/profile', async (req, res) => {
     try {
