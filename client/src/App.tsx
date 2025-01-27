@@ -10,6 +10,7 @@ import Dashboard from "@/pages/dashboard";
 import Notifications from "@/pages/notifications";
 import Resources from "@/pages/resources";
 import Analytics from "@/pages/analytics";
+import Trends from "@/pages/trends";
 
 function Router() {
   return (
@@ -23,6 +24,7 @@ function Router() {
           <Route path="/notifications" component={Notifications} />
           <Route path="/resources" component={Resources} />
           <Route path="/analytics" component={Analytics} />
+          <Route path="/trends" component={Trends} />
           <Route component={NotFound} />
         </Switch>
       </main>

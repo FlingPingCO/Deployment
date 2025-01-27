@@ -150,6 +150,85 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
+  // Trends endpoint with privacy controls
+  app.get('/api/trends', async (req, res) => {
+    try {
+      const { timeRange = '30d', granularity = 'weekly', showLocation = false, showDemographics = false } = req.query;
+
+      // Calculate the date range
+      const daysMap: Record<string, number> = {
+        '7d': 7,
+        '30d': 30,
+        '90d': 90,
+        '1y': 365
+      };
+      const days = daysMap[timeRange as string] || 30;
+
+      // Base notification trends query
+      const notificationTrends = await db.execute(sql`
+        WITH dates AS (
+          SELECT generate_series(
+            date_trunc('day', now()) - interval '${sql.raw(days.toString())} days',
+            date_trunc('day', now()),
+            ${sql.raw(
+              granularity === 'daily' ? `interval '1 day'` :
+              granularity === 'weekly' ? `interval '1 week'` :
+              `interval '1 month'`
+            )}
+          ) as date
+        )
+        SELECT 
+          dates.date,
+          COUNT(notifications.id) as count
+        FROM dates
+        LEFT JOIN notifications ON date_trunc(${sql.raw(
+          granularity === 'daily' ? "'day'" :
+          granularity === 'weekly' ? "'week'" :
+          "'month'"
+        )}, notifications.created_at) = dates.date
+        GROUP BY dates.date
+        ORDER BY dates.date ASC
+      `);
+
+      // Optional demographic data
+      let demographicData = null;
+      if (showDemographics) {
+        // In a real app, this would aggregate actual demographic data
+        // For now, we'll return mock data
+        demographicData = [
+          { range: '18-24', count: 120 },
+          { range: '25-34', count: 250 },
+          { range: '35-44', count: 180 },
+          { range: '45-54', count: 90 },
+          { range: '55+', count: 60 },
+        ];
+      }
+
+      // Optional location data
+      let locationData = null;
+      if (showLocation) {
+        // In a real app, this would aggregate actual location data
+        // For now, we'll return mock data
+        locationData = [
+          { city: 'San Francisco', count: 350 },
+          { city: 'Los Angeles', count: 280 },
+          { city: 'New York', count: 420 },
+          { city: 'Chicago', count: 190 },
+          { city: 'Miami', count: 150 },
+        ];
+      }
+
+      res.json({
+        notifications: notificationTrends.rows,
+        demographics: demographicData,
+        location: locationData,
+      });
+    } catch (error) {
+      console.error('Error fetching trends:', error);
+      res.status(500).json({ error: 'Failed to fetch trends data' });
+    }
+  });
+
   app.get('/api/analytics/trends', async (req, res) => {
     try {
       const notificationTrends = await db.execute(sql`

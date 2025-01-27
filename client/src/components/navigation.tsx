@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/components/ui/navigation-menu";
-import { Heart, Bell, BookOpen, Home, BarChart } from "lucide-react";
+import { Heart, Bell, BookOpen, Home, BarChart, TrendingUp } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Navigation() {
@@ -45,7 +45,14 @@ export default function Navigation() {
                 </Button>
               </Link>
             </NavigationMenuItem>
-            {/* Only show analytics for admin users */}
+            <NavigationMenuItem>
+              <Link href="/trends">
+                <Button variant="ghost" size="sm">
+                  <TrendingUp className="mr-2 h-4 w-4" />
+                  Trends
+                </Button>
+              </Link>
+            </NavigationMenuItem>
             {profile?.isAdmin && (
               <NavigationMenuItem>
                 <Link href="/analytics">
