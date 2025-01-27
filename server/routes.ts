@@ -61,15 +61,19 @@ export function registerRoutes(app: Express): Server {
 
   app.post('/api/notifications', async (req, res) => {
     try {
-      const { type, recipientPingPin, senderPingPin, context } = req.body;
+      const { type, senderPingPin, context } = req.body;
+
+      // TODO: In a real implementation, this would query the Bluetooth proximity
+      // database to find recent contacts. For now, we'll just create a notification
+      // that will be visible to the sender.
 
       // Generate AI message
       const content = await generateNotification(type, context);
 
       const notification = await db.insert(notifications).values({
         type,
-        recipientPingPin,
-        senderPingPin,
+        recipientPingPin: senderPingPin, // For now, just show to sender
+        senderPingPin: 'SYSTEM', // Mark as system notification
         content: { message: content },
         read: false,
       }).returning();

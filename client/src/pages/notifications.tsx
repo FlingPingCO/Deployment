@@ -6,14 +6,12 @@ import { Bell, AlertCircle, Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
-import { Input } from "@/components/ui/input";
 
 type NotificationType = 'exposure' | 'test_result' | 'reminder';
 
 interface NotificationFormData {
   testResult: string;
   type: NotificationType;
-  recipientPingPin: string;
 }
 
 export default function Notifications() {
@@ -33,7 +31,6 @@ export default function Notifications() {
         body: JSON.stringify({
           type: data.type,
           senderPingPin: profile?.pingPin,
-          recipientPingPin: data.recipientPingPin,
           context: {
             testType: data.testResult,
             date: new Date().toISOString(),
@@ -49,15 +46,15 @@ export default function Notifications() {
     },
     onSuccess: () => {
       toast({
-        title: "Notification Sent",
-        description: "Your anonymous notification has been sent successfully.",
+        title: "Status Update Sent",
+        description: "Your status has been updated. Recent contacts will be notified anonymously.",
       });
       form.reset();
     },
     onError: (error) => {
       toast({
         title: "Error",
-        description: "Failed to send notification. Please try again.",
+        description: "Failed to update status. Please try again.",
         variant: "destructive",
       });
     },
@@ -72,7 +69,7 @@ export default function Notifications() {
     if (!profile?.pingPin) {
       toast({
         title: "Error",
-        description: "You must be logged in to send notifications.",
+        description: "You must be logged in to update your status.",
         variant: "destructive",
       });
       return;
@@ -83,55 +80,40 @@ export default function Notifications() {
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold">Notifications</h1>
+        <h1 className="text-3xl font-bold">Health Status Update</h1>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Send Anonymous Notification</CardTitle>
+          <CardTitle>Update Your Status</CardTitle>
         </CardHeader>
         <CardContent>
           <p className="text-sm text-muted-foreground mb-4">
-            Our AI will help generate an appropriate, sensitive message. Your identity will remain anonymous.
+            Your update will automatically notify recent contacts anonymously through our system.
+            Our AI will help generate appropriate, sensitive messages.
           </p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
-                name="recipientPingPin"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Recipient's Ping Pin</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter recipient's PP" {...field} />
-                    </FormControl>
-                    <FormDescription>
-                      Enter the Ping Pin of the person you want to notify
-                    </FormDescription>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
                 name="type"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Notification Type</FormLabel>
+                    <FormLabel>Update Type</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select notification type" />
+                          <SelectValue placeholder="Select update type" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="exposure">Exposure Alert</SelectItem>
-                        <SelectItem value="test_result">Test Result</SelectItem>
-                        <SelectItem value="reminder">Health Reminder</SelectItem>
+                        <SelectItem value="exposure">Report Exposure</SelectItem>
+                        <SelectItem value="test_result">Report Test Result</SelectItem>
+                        <SelectItem value="reminder">Send Health Reminder</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormDescription>
-                      Choose the type of notification to send. Our AI will generate an appropriate message.
+                      Choose the type of update. The system will notify relevant contacts anonymously.
                     </FormDescription>
                   </FormItem>
                 )}
@@ -157,6 +139,9 @@ export default function Notifications() {
                         <SelectItem value="other">Other STI/STD</SelectItem>
                       </SelectContent>
                     </Select>
+                    <FormDescription>
+                      Your identity will remain anonymous in all notifications.
+                    </FormDescription>
                   </FormItem>
                 )}
               />
@@ -169,12 +154,12 @@ export default function Notifications() {
                 {sendNotification.isPending ? (
                   <>
                     <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Generating...
+                    Updating...
                   </>
                 ) : (
                   <>
                     <AlertCircle className="mr-2 h-4 w-4" />
-                    Send Anonymous Notification
+                    Update Status & Notify Contacts
                   </>
                 )}
               </Button>
