@@ -15,7 +15,7 @@ export function setupSessionAuth(app: Express) {
   const sessionSettings: session.SessionOptions = {
     secret: process.env.SESSION_SECRET || "flingping-anonymous-session",
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true, // Changed to true to support pre-login anonymous access
     cookie: {
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       secure: app.get("env") === "production",
@@ -35,9 +35,21 @@ export function setupSessionAuth(app: Express) {
   // Middleware to check if user is authenticated
   app.use((req, res, next) => {
     // Skip auth check for public routes
-    if (req.path.startsWith('/api/health') || 
+    if (req.path === '/' || 
+        req.path.startsWith('/api/health') || 
         req.path === '/api/profiles' || 
-        req.path.startsWith('/api/resources')) {
+        req.path.startsWith('/api/resources') ||
+        req.path.startsWith('/assets')) {
+      return next();
+    }
+
+    // If user has a pingPin, they're considered authenticated
+    if (req.session.pingPin) {
+      req.session.isAuthenticated = true;
+    }
+
+    // Allow access to all routes during development
+    if (app.get("env") === "development") {
       return next();
     }
 
