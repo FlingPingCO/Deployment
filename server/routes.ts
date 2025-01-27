@@ -168,8 +168,8 @@ export function registerRoutes(app: Express): Server {
       const notificationTrends = await db.execute(sql`
         WITH dates AS (
           SELECT generate_series(
-            date_trunc('day', now()) - interval '${sql.raw(days.toString())} days',
-            date_trunc('day', now()),
+            date_trunc('day', now() AT TIME ZONE 'UTC') - interval '${sql.raw(days.toString())} days',
+            date_trunc('day', now() AT TIME ZONE 'UTC'),
             ${sql.raw(
               granularity === 'daily' ? `interval '1 day'` :
               granularity === 'weekly' ? `interval '1 week'` :
@@ -178,55 +178,71 @@ export function registerRoutes(app: Express): Server {
           ) as date
         )
         SELECT 
-          to_char(dates.date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as date,
-          COALESCE(COUNT(notifications.id), 0) as count
+          to_char(dates.date AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as date,
+          COALESCE(COUNT(notifications.id), 0)::integer as count
         FROM dates
         LEFT JOIN notifications ON date_trunc(${sql.raw(
           granularity === 'daily' ? "'day'" :
           granularity === 'weekly' ? "'week'" :
           "'month'"
-        )}, notifications.created_at) = dates.date
+        )}, notifications.created_at AT TIME ZONE 'UTC') = dates.date
         GROUP BY dates.date
-        ORDER BY dates.date ASC
+        ORDER BY dates.date ASC;
       `);
 
-      // Optional demographic data with actual counts
+      // Optional demographic data with mock distribution
       let demographicData = null;
       if (showDemographics) {
         demographicData = await db.execute(sql`
+          WITH total AS (
+            SELECT COUNT(*)::float as total_count 
+            FROM notifications 
+            WHERE created_at > now() - interval '${sql.raw(days.toString())} days'
+          )
           SELECT 
-            CASE 
-              WHEN random() < 0.2 THEN '18-24'
-              WHEN random() < 0.4 THEN '25-34'
-              WHEN random() < 0.6 THEN '35-44'
-              WHEN random() < 0.8 THEN '45-54'
-              ELSE '55+'
-            END as range,
-            COUNT(*) as count
-          FROM notifications
-          WHERE created_at > now() - interval '${sql.raw(days.toString())} days'
-          GROUP BY range
-          ORDER BY range
+            age_range as range,
+            (count::integer) as count
+          FROM (
+            VALUES 
+              ('18-24', 0.25),
+              ('25-34', 0.35),
+              ('35-44', 0.20),
+              ('45-54', 0.15),
+              ('55+', 0.05)
+          ) as t(age_range, percentage)
+          CROSS JOIN total
+          CROSS JOIN LATERAL (
+            SELECT (total.total_count * percentage)::integer as count
+          ) counts
+          ORDER BY range;
         `);
       }
 
-      // Optional location data with actual counts
+      // Optional location data with mock distribution
       let locationData = null;
       if (showLocation) {
         locationData = await db.execute(sql`
+          WITH total AS (
+            SELECT COUNT(*)::float as total_count 
+            FROM notifications 
+            WHERE created_at > now() - interval '${sql.raw(days.toString())} days'
+          )
           SELECT 
-            CASE 
-              WHEN random() < 0.2 THEN 'San Francisco'
-              WHEN random() < 0.4 THEN 'Los Angeles'
-              WHEN random() < 0.6 THEN 'New York'
-              WHEN random() < 0.8 THEN 'Chicago'
-              ELSE 'Miami'
-            END as city,
-            COUNT(*) as count
-          FROM notifications
-          WHERE created_at > now() - interval '${sql.raw(days.toString())} days'
-          GROUP BY city
-          ORDER BY count DESC
+            city,
+            (count::integer) as count
+          FROM (
+            VALUES 
+              ('San Francisco', 0.30),
+              ('Los Angeles', 0.25),
+              ('New York', 0.20),
+              ('Chicago', 0.15),
+              ('Miami', 0.10)
+          ) as t(city, percentage)
+          CROSS JOIN total
+          CROSS JOIN LATERAL (
+            SELECT (total.total_count * percentage)::integer as count
+          ) counts
+          ORDER BY count DESC;
         `);
       }
 
