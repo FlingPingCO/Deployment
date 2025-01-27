@@ -25,22 +25,6 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
-  .figtree-light-accent {
-    font-family: "Figtree", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 200;
-    font-style: normal;
-  }
-
-  .figtree-bold-accent {
-    font-family: "Figtree", sans-serif;
-    font-optical-sizing: auto;
-    font-weight: 700;
-    font-style: normal;
-  }
-}
-
 @layer base {
   * {
     @apply border-border;
