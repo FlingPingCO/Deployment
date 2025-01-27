@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useForm } from "react-hook-form";
-import { Crown, Gift, Star } from "lucide-react";
+import { Crown, Gift, Star, Zap } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function FoundingFlinger() {
@@ -12,28 +12,44 @@ export default function FoundingFlinger() {
 
   const onSubmit = async (data: any) => {
     toast({
-      title: "Thanks for your interest!",
-      description: "We'll notify you when we launch.",
+      title: "You're on your way to becoming a Founding Flinger!",
+      description: "We'll be in touch with next steps.",
     });
   };
 
   return (
     <div className="max-w-4xl mx-auto">
       <div className="text-center mb-12">
-        <h1 className="text-4xl font-bold mb-4">Become a Founding Flinger</h1>
-        <p className="text-lg text-muted-foreground">
-          Join our exclusive early access program and help shape the future of safe casual connections.
+        <h1 className="text-4xl font-bold mb-4">Join the FlingPing Revolution</h1>
+        <p className="text-xl font-semibold text-primary mb-2">
+          Only 250 Founding Flinger Spots Available!
         </p>
+        <p className="text-lg text-muted-foreground">
+          Be part of the movement that's creating a smarter, healthier community.
+        </p>
+        <div className="mt-4 inline-block bg-primary text-primary-foreground px-6 py-3 rounded-lg text-xl font-bold">
+          Lifetime Access for $99
+        </div>
       </div>
 
       <div className="grid gap-8 md:grid-cols-3 mb-12">
         <Card>
           <CardHeader>
             <Crown className="w-12 h-12 mb-4 text-primary mx-auto" />
+            <CardTitle>Lifetime Membership</CardTitle>
+          </CardHeader>
+          <CardContent>
+            Pay once and unlock all core features—no subscriptions, no limits, just peace of mind.
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <Zap className="w-12 h-12 mb-4 text-primary mx-auto" />
             <CardTitle>Early Access</CardTitle>
           </CardHeader>
           <CardContent>
-            Be among the first to use FlingPing.co and help us make it better.
+            Shape FlingPing's future with your feedback and be first to try new features.
           </CardContent>
         </Card>
 
@@ -43,24 +59,14 @@ export default function FoundingFlinger() {
             <CardTitle>Exclusive Perks</CardTitle>
           </CardHeader>
           <CardContent>
-            Get special badges, features, and swag available only to founding members.
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <Star className="w-12 h-12 mb-4 text-primary mx-auto" />
-            <CardTitle>Lifetime Benefits</CardTitle>
-          </CardHeader>
-          <CardContent>
-            Enjoy premium features for life as a thank you for being an early supporter.
+            Limited edition Founding Flinger swag and recognition in our community.
           </CardContent>
         </Card>
       </div>
 
       <Card className="max-w-md mx-auto">
         <CardHeader>
-          <CardTitle>Reserve Your Spot</CardTitle>
+          <CardTitle>Secure Your Founding Flinger Spot</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...form}>
@@ -77,7 +83,9 @@ export default function FoundingFlinger() {
                   </FormItem>
                 )}
               />
-              <Button type="submit" className="w-full">Join the Waitlist</Button>
+              <Button type="submit" className="w-full">
+                Join for $99 - Lifetime Access
+              </Button>
             </form>
           </Form>
         </CardContent>
