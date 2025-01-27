@@ -1,13 +1,13 @@
 import { Switch, Route } from "wouter";
-import { QueryClientProvider } from "@tanstack/react-query";
 import { queryClient } from "./lib/queryClient";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import Navigation from "@/components/navigation";
 import NotFound from "@/pages/not-found";
 import Dashboard from "@/pages/dashboard";
 import Notifications from "@/pages/notifications";
 import Resources from "@/pages/resources";
-import Analytics from "@/pages/analytics";
+import PreLaunch from "@/pages/PreLaunch";
 
 function Router() {
   return (
@@ -18,8 +18,8 @@ function Router() {
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/notifications" component={Notifications} />
           <Route path="/resources" component={Resources} />
-          <Route path="/analytics" component={Analytics} />
-          <Route path="/" component={Dashboard} />
+          <Route path="/connect" component={() => <div>Coming Soon</div>} />
+          <Route path="/" component={PreLaunch} />
           <Route component={NotFound} />
         </Switch>
       </main>

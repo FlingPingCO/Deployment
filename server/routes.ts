@@ -14,10 +14,14 @@ export function registerRoutes(app: Express): Server {
     res.json({ status: 'healthy' });
   });
 
-  // Anonymous profile management
+  // Profile management
   app.post('/api/profiles', async (req, res) => {
     try {
-      const profile = await db.insert(profiles).values(req.body).returning();
+      const profile = await db.insert(profiles).values({
+        ...req.body,
+        pingPin: `PP-${Math.random().toString(36).substring(2, 6).toUpperCase()}-${Math.random().toString(36).substring(2, 6).toUpperCase()}`,
+        createdAt: new Date(),
+      }).returning();
       res.json(profile[0]);
     } catch (error) {
       console.error('Failed to create profile:', error);
@@ -25,12 +29,16 @@ export function registerRoutes(app: Express): Server {
     }
   });
 
-  app.get('/api/profiles/:pingPin', async (req, res) => {
+  // Get current user's profile
+  app.get('/api/profile', async (req, res) => {
+    if (!req.session.pingPin) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
     try {
       const [profile] = await db
         .select()
         .from(profiles)
-        .where(eq(profiles.pingPin, req.params.pingPin))
+        .where(eq(profiles.pingPin, req.session.pingPin))
         .limit(1);
 
       if (!profile) {
@@ -46,8 +54,15 @@ export function registerRoutes(app: Express): Server {
 
   // Notification system
   app.post('/api/notifications', async (req, res) => {
+    if (!req.session.pingPin) {
+      return res.status(401).json({ error: 'Not authenticated' });
+    }
     try {
-      const notification = await db.insert(notifications).values(req.body).returning();
+      const notification = await db.insert(notifications).values({
+        ...req.body,
+        senderPingPin: req.session.pingPin,
+        createdAt: new Date(),
+      }).returning();
       res.json(notification[0]);
     } catch (error) {
       console.error('Failed to create notification:', error);
@@ -60,7 +75,8 @@ export function registerRoutes(app: Express): Server {
       const userNotifications = await db
         .select()
         .from(notifications)
-        .where(eq(notifications.recipientPingPin, req.params.pingPin));
+        .where(eq(notifications.recipientPingPin, req.params.pingPin))
+        .orderBy(notifications.createdAt);
 
       res.json(userNotifications);
     } catch (error) {
