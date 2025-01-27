@@ -8,9 +8,12 @@ type NotificationType = 'exposure' | 'test_result' | 'reminder';
 
 // Fallback messages when AI generation fails
 const FALLBACK_MESSAGES = {
-  exposure: "Someone you recently connected with has reported potential exposure. Please get tested at your earliest convenience. Your health matters.",
-  test_result: "A recent contact has received test results they think you should know about. Please consult with a healthcare provider.",
-  reminder: "This is a friendly reminder to stay on top of your sexual health. Regular testing helps keep you and others safe.",
+  exposure: (context: any) => 
+    `Someone you recently connected with has reported potential exposure to ${context.testType}. Please get tested at your earliest convenience. Your health matters.`,
+  test_result: (context: any) => 
+    `A recent contact has received test results for ${context.testType} that they think you should know about. Please consult with a healthcare provider.`,
+  reminder: (context: any) => 
+    "This is a friendly reminder to stay on top of your sexual health. Regular testing helps keep you and others safe.",
 };
 
 const NOTIFICATION_PROMPTS = {
@@ -53,17 +56,17 @@ export async function generateNotification(
         },
         {
           role: "user",
-          content: `${basePrompt}\n\nContext:\n${contextStr}`,
+          content: `${basePrompt}\n\nContext:\n${contextStr}\n\nIMPORTANT: If this is about a specific test result or exposure, make sure to include the specific type (${context.testType}) in the message while maintaining privacy and sensitivity.`,
         },
       ],
       max_tokens: 150,
       temperature: 0.7,
     });
 
-    return completion.choices[0].message.content || FALLBACK_MESSAGES[type];
+    return completion.choices[0].message.content || FALLBACK_MESSAGES[type](context);
   } catch (error) {
     console.error("AI Notification Generation Error:", error);
     // Return fallback message if AI generation fails
-    return FALLBACK_MESSAGES[type];
+    return FALLBACK_MESSAGES[type](context);
   }
 }
