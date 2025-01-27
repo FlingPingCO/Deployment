@@ -1,4 +1,10 @@
-/* Custom Font Imports */
+/* Import statements should be at the top */
+@import '@fontsource/poppins/500.css';
+@import '@fontsource/poppins/200.css';
+@import '@fontsource/unbounded/500.css';
+@import '@fontsource/nunito/400.css';
+
+/* Custom Font Face Declarations */
 @font-face {
   font-family: 'Figtree';
   src: url('/fonts/Figtree-VariableFont_wght.ttf') format('truetype-variations');
@@ -14,11 +20,6 @@
   font-style: italic;
   font-display: swap;
 }
-
-@import '@fontsource/poppins/500.css';
-@import '@fontsource/poppins/200.css';
-@import '@fontsource/unbounded/500.css';
-@import '@fontsource/nunito/400.css';
 
 @tailwind base;
 @tailwind components;
