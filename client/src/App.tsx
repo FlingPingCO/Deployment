@@ -8,6 +8,7 @@ import Dashboard from "@/pages/dashboard";
 import Notifications from "@/pages/notifications";
 import Resources from "@/pages/resources";
 import PreLaunch from "@/pages/PreLaunch";
+import Contacts from "@/pages/contacts";
 
 function Router() {
   return (
@@ -18,6 +19,7 @@ function Router() {
           <Route path="/dashboard" component={Dashboard} />
           <Route path="/notifications" component={Notifications} />
           <Route path="/resources" component={Resources} />
+          <Route path="/contacts" component={Contacts} />
           <Route path="/connect" component={() => <div>Coming Soon</div>} />
           <Route path="/" component={PreLaunch} />
           <Route component={NotFound} />

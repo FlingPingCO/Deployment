@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/components/ui/navigation-menu";
-import { Heart, Bell, BookOpen, Home, Bluetooth } from "lucide-react";
+import { Heart, Bell, BookOpen, Home, Bluetooth, Users } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Navigation() {
@@ -28,6 +28,14 @@ export default function Navigation() {
                 <Button variant="ghost" size="sm" className="text-white hover:bg-[#0ACCA8]/10 transition-colors duration-200">
                   <Home className="mr-2 h-4 w-4 text-[#0ACCA8]" />
                   Dashboard
+                </Button>
+              </Link>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <Link href="/contacts">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-[#5EB4FF]/10 transition-colors duration-200">
+                  <Users className="mr-2 h-4 w-4 text-[#5EB4FF]" />
+                  Contacts
                 </Button>
               </Link>
             </NavigationMenuItem>
