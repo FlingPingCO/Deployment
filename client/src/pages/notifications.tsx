@@ -6,17 +6,24 @@ import { Bell, AlertCircle, Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery } from "@tanstack/react-query";
+import { Input } from "@/components/ui/input";
 
 type NotificationType = 'exposure' | 'test_result' | 'reminder';
 
 interface NotificationFormData {
   testResult: string;
   type: NotificationType;
+  recipientPingPin: string;
 }
 
 export default function Notifications() {
   const { toast } = useToast();
   const form = useForm<NotificationFormData>();
+
+  // Get current user's profile
+  const { data: profile } = useQuery<any>({
+    queryKey: ["/api/profile"],
+  });
 
   const sendNotification = useMutation({
     mutationFn: async (data: NotificationFormData) => {
@@ -25,8 +32,8 @@ export default function Notifications() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           type: data.type,
-          senderPingPin: "YOUR_PP", // You would get this from user context
-          recipientPingPin: "RECIPIENT_PP", // This would come from selected contacts
+          senderPingPin: profile?.pingPin,
+          recipientPingPin: data.recipientPingPin,
           context: {
             testType: data.testResult,
             date: new Date().toISOString(),
@@ -56,11 +63,20 @@ export default function Notifications() {
     },
   });
 
-  const { data: recentNotifications, isLoading } = useQuery({
-    queryKey: ["/api/notifications/YOUR_PP"], // Replace with actual PP
+  const { data: recentNotifications, isLoading } = useQuery<any>({
+    queryKey: [`/api/notifications/${profile?.pingPin}`],
+    enabled: !!profile?.pingPin,
   });
 
   const onSubmit = (data: NotificationFormData) => {
+    if (!profile?.pingPin) {
+      toast({
+        title: "Error",
+        description: "You must be logged in to send notifications.",
+        variant: "destructive",
+      });
+      return;
+    }
     sendNotification.mutate(data);
   };
 
@@ -80,6 +96,22 @@ export default function Notifications() {
           </p>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <FormField
+                control={form.control}
+                name="recipientPingPin"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Recipient's Ping Pin</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter recipient's PP" {...field} />
+                    </FormControl>
+                    <FormDescription>
+                      Enter the Ping Pin of the person you want to notify
+                    </FormDescription>
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="type"
@@ -157,7 +189,7 @@ export default function Notifications() {
           <div className="flex justify-center p-4">
             <Loader2 className="h-6 w-6 animate-spin" />
           </div>
-        ) : recentNotifications?.length === 0 ? (
+        ) : !recentNotifications || recentNotifications.length === 0 ? (
           <Card>
             <CardContent className="p-4 text-center text-muted-foreground">
               No notifications yet

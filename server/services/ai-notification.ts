@@ -13,13 +13,13 @@ const NOTIFICATION_PROMPTS = {
   - Non-judgmental and supportive
   - Clear about the need for testing
   - Encouraging and positive`,
-  
+
   test_result: `Generate a notification about sharing test results. The message should be:
   - Private and confidential
   - Direct but sensitive
   - Focused on health and well-being
   - Include next steps for testing/treatment`,
-  
+
   reminder: `Generate a friendly reminder about sexual health. The message should be:
   - Casual and non-threatening
   - Encouraging regular testing
@@ -38,7 +38,7 @@ export async function generateNotification(
       .join('\n');
 
     const completion = await openai.chat.completions.create({
-      model: "gpt-4",
+      model: "gpt-3.5-turbo",
       messages: [
         {
           role: "system",
