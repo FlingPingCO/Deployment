@@ -8,7 +8,7 @@ export default function Contacts() {
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-3xl font-bold">Contact History</h1>
+          <h1 className="text-3xl font-bold">24-Hour Contact History</h1>
           <div className="mt-2">
             <PrivacyBadge />
           </div>
@@ -26,27 +26,37 @@ export default function Contacts() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm mb-4">
-              The chart above displays your proximity history with other FlingPing users:
-            </p>
-            <ul className="list-disc pl-6 space-y-2 text-sm">
-              <li>
-                <span className="font-medium">Timeline:</span> The horizontal axis shows when 
-                contacts occurred over the last 24 hours
-              </li>
-              <li>
-                <span className="font-medium">Distance:</span> The vertical axis shows how close 
-                you were to each contact (in meters)
-              </li>
-              <li>
-                <span className="font-medium">Duration:</span> The size of each dot indicates 
-                how long the contact lasted
-              </li>
-              <li>
-                <span className="font-medium">Identity:</span> Each contact is shown by their 
-                anonymous Ping Pin - click any dot to see details
-              </li>
-            </ul>
+            <div className="space-y-6">
+              <div className="space-y-2">
+                <ul className="list-disc pl-6 space-y-2 text-sm">
+                  <li>Each dot shows a past interaction with another FlingPing user (shown by their Ping Pin)</li>
+                  <li>Larger circles mean you spent more time near that person</li>
+                  <li>Click any point to see when and how long the contact lasted</li>
+                </ul>
+              </div>
+
+              <div className="space-y-2">
+                <p className="text-sm">The chart above displays your proximity history with other FlingPing users:</p>
+                <ul className="list-disc pl-6 space-y-2 text-sm">
+                  <li>
+                    <span className="font-medium">Timeline:</span> The horizontal axis shows when 
+                    contacts occurred over the last 24 hours
+                  </li>
+                  <li>
+                    <span className="font-medium">Distance:</span> The vertical axis shows how close 
+                    you were to each contact (in meters)
+                  </li>
+                  <li>
+                    <span className="font-medium">Duration:</span> The size of each dot indicates 
+                    how long the contact lasted
+                  </li>
+                  <li>
+                    <span className="font-medium">Identity:</span> Each contact is shown by their 
+                    anonymous Ping Pin - click any dot to see details
+                  </li>
+                </ul>
+              </div>
+            </div>
           </CardContent>
         </Card>
 
