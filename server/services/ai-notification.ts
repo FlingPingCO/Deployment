@@ -9,26 +9,32 @@ type NotificationType = 'exposure' | 'test_result' | 'reminder';
 // Fallback messages when AI generation fails
 const FALLBACK_MESSAGES = {
   exposure: (context: any) => 
-    `Someone you recently connected with has reported potential exposure to ${context.testType}. Please get tested at your earliest convenience. Your health matters.`,
+    `Someone you recently connected with has reported ${context.exposureType} exposure to ${context.testType}. Please get tested at your earliest convenience. Your health matters.`,
   test_result: (context: any) => 
-    `A recent contact has received test results for ${context.testType} that they think you should know about. Please consult with a healthcare provider.`,
+    `A recent contact has received a ${context.testResultStatus} test result for ${context.testType} that they think you should know about. ${
+      context.testResultStatus === 'positive' 
+        ? 'Please consult with a healthcare provider as soon as possible.'
+        : 'Consider getting tested to confirm your status.'
+    }`,
   reminder: (context: any) => 
     "This is a friendly reminder to stay on top of your sexual health. Regular testing helps keep you and others safe.",
 };
 
 const NOTIFICATION_PROMPTS = {
-  exposure: `Generate a sensitive, supportive notification about potential STI exposure. 
+  exposure: `Generate a sensitive, supportive notification about STI exposure. 
   The message should be:
   - Anonymous and discreet
   - Non-judgmental and supportive
   - Clear about the need for testing
-  - Encouraging and positive`,
+  - Specify whether it's direct or indirect exposure
+  - Include the specific condition while maintaining privacy`,
 
   test_result: `Generate a notification about sharing test results. The message should be:
   - Private and confidential
   - Direct but sensitive
   - Focused on health and well-being
-  - Include next steps for testing/treatment`,
+  - Include the specific test type and result status
+  - Provide appropriate next steps based on result status`,
 
   reminder: `Generate a friendly reminder about sexual health. The message should be:
   - Casual and non-threatening
@@ -56,7 +62,7 @@ export async function generateNotification(
         },
         {
           role: "user",
-          content: `${basePrompt}\n\nContext:\n${contextStr}\n\nIMPORTANT: If this is about a specific test result or exposure, make sure to include the specific type (${context.testType}) in the message while maintaining privacy and sensitivity.`,
+          content: `${basePrompt}\n\nContext:\n${contextStr}\n\nIMPORTANT: Include specific details about the ${type} (${context.testType ? `condition: ${context.testType}, ` : ''}${context.testResultStatus ? `result: ${context.testResultStatus}, ` : ''}${context.exposureType ? `exposure type: ${context.exposureType}` : ''}) while maintaining privacy and sensitivity.`,
         },
       ],
       max_tokens: 150,

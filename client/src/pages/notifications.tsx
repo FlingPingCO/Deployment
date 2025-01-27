@@ -4,14 +4,20 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormDescription } fr
 import { useForm } from "react-hook-form";
 import { Bell, AlertCircle, Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type NotificationType = 'exposure' | 'test_result' | 'reminder';
+type ExposureType = 'direct' | 'indirect';
+type TestResultStatus = 'positive' | 'negative';
 
 interface NotificationFormData {
-  testResult: string;
   type: NotificationType;
+  exposureType?: ExposureType;
+  testResultStatus?: TestResultStatus;
+  testType?: string;
+  otherTestType?: string;
 }
 
 export default function Notifications() {
@@ -33,7 +39,9 @@ export default function Notifications() {
           type: data.type,
           senderPingPin: profile?.pingPin,
           context: {
-            testType: data.testResult,
+            testType: data.testType === 'other' ? data.otherTestType : data.testType,
+            exposureType: data.exposureType,
+            testResultStatus: data.testResultStatus,
             date: new Date().toISOString(),
           },
         }),
@@ -51,7 +59,6 @@ export default function Notifications() {
         description: "Your status has been updated. Recent contacts will be notified anonymously.",
       });
       form.reset();
-      // Invalidate notifications query to refresh the list
       queryClient.invalidateQueries({ queryKey: [`/api/notifications/${profile?.pingPin}`] });
     },
     onError: (error) => {
@@ -77,8 +84,50 @@ export default function Notifications() {
       });
       return;
     }
+
+    // Validate required fields based on type
+    if (data.type === 'exposure' && !data.exposureType) {
+      toast({
+        title: "Error",
+        description: "Please select the type of exposure.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (data.type === 'test_result') {
+      if (!data.testResultStatus) {
+        toast({
+          title: "Error",
+          description: "Please select test result status (positive/negative).",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (!data.testType) {
+        toast({
+          title: "Error",
+          description: "Please select or specify the test type.",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (data.testType === 'other' && !data.otherTestType) {
+        toast({
+          title: "Error",
+          description: "Please specify the other test type.",
+          variant: "destructive",
+        });
+        return;
+      }
+    }
+
     sendNotification.mutate(data);
   };
+
+  const updateType = form.watch("type");
+  const testType = form.watch("testType");
+  const testResultStatus = form.watch("testResultStatus");
 
   return (
     <div className="space-y-8">
@@ -115,39 +164,101 @@ export default function Notifications() {
                         <SelectItem value="reminder">Send Health Reminder</SelectItem>
                       </SelectContent>
                     </Select>
-                    <FormDescription>
-                      Choose the type of update. The system will notify relevant contacts anonymously.
-                    </FormDescription>
                   </FormItem>
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="testResult"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Test Result Type</FormLabel>
-                    <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select test result to report" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="chlamydia">Chlamydia</SelectItem>
-                        <SelectItem value="gonorrhea">Gonorrhea</SelectItem>
-                        <SelectItem value="syphilis">Syphilis</SelectItem>
-                        <SelectItem value="hiv">HIV</SelectItem>
-                        <SelectItem value="other">Other STI/STD</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormDescription>
-                      Your identity will remain anonymous in all notifications.
-                    </FormDescription>
-                  </FormItem>
-                )}
-              />
+              {updateType === 'exposure' && (
+                <FormField
+                  control={form.control}
+                  name="exposureType"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Exposure Type</FormLabel>
+                      <Select onValueChange={field.onChange} defaultValue={field.value}>
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select exposure type" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="direct">Direct Exposure</SelectItem>
+                          <SelectItem value="indirect">Indirect Exposure</SelectItem>
+                        </SelectContent>
+                      </Select>
+                      <FormDescription>
+                        Direct: You were directly exposed. Indirect: You were notified of potential exposure by someone else.
+                      </FormDescription>
+                    </FormItem>
+                  )}
+                />
+              )}
+
+              {updateType === 'test_result' && (
+                <>
+                  <FormField
+                    control={form.control}
+                    name="testResultStatus"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Test Result Status</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select test result status" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="positive">Positive</SelectItem>
+                            <SelectItem value="negative">Negative</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormItem>
+                    )}
+                  />
+
+                  {testResultStatus === 'positive' && (
+                    <FormField
+                      control={form.control}
+                      name="testType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Test Type</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select test type" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="chlamydia">Chlamydia</SelectItem>
+                              <SelectItem value="gonorrhea">Gonorrhea</SelectItem>
+                              <SelectItem value="syphilis">Syphilis</SelectItem>
+                              <SelectItem value="hiv">HIV</SelectItem>
+                              <SelectItem value="other">Other STI/STD</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </FormItem>
+                      )}
+                    />
+                  )}
+
+                  {testResultStatus === 'positive' && testType === 'other' && (
+                    <FormField
+                      control={form.control}
+                      name="otherTestType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Specify Other STI/STD</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter the specific STI/STD" {...field} />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  )}
+                </>
+              )}
 
               <Button 
                 type="submit" 
