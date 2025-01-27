@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { Bell, AlertCircle, Loader2 } from "lucide-react";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 type NotificationType = 'exposure' | 'test_result' | 'reminder';
 
@@ -17,6 +17,7 @@ interface NotificationFormData {
 export default function Notifications() {
   const { toast } = useToast();
   const form = useForm<NotificationFormData>();
+  const queryClient = useQueryClient();
 
   // Get current user's profile
   const { data: profile } = useQuery<any>({
@@ -50,6 +51,8 @@ export default function Notifications() {
         description: "Your status has been updated. Recent contacts will be notified anonymously.",
       });
       form.reset();
+      // Invalidate notifications query to refresh the list
+      queryClient.invalidateQueries({ queryKey: [`/api/notifications/${profile?.pingPin}`] });
     },
     onError: (error) => {
       toast({
@@ -187,7 +190,7 @@ export default function Notifications() {
                 <div className="flex items-center space-x-4">
                   <Bell className="h-6 w-6 text-primary" />
                   <div>
-                    <p className="font-medium">{notification.content.message}</p>
+                    <p className="font-medium">{notification.content?.message}</p>
                     <p className="text-sm text-muted-foreground">
                       {new Date(notification.createdAt).toLocaleDateString()}
                     </p>

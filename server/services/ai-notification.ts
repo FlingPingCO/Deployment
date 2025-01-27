@@ -6,6 +6,13 @@ const openai = new OpenAI({
 
 type NotificationType = 'exposure' | 'test_result' | 'reminder';
 
+// Fallback messages when AI generation fails
+const FALLBACK_MESSAGES = {
+  exposure: "Someone you recently connected with has reported potential exposure. Please get tested at your earliest convenience. Your health matters.",
+  test_result: "A recent contact has received test results they think you should know about. Please consult with a healthcare provider.",
+  reminder: "This is a friendly reminder to stay on top of your sexual health. Regular testing helps keep you and others safe.",
+};
+
 const NOTIFICATION_PROMPTS = {
   exposure: `Generate a sensitive, supportive notification about potential STI exposure. 
   The message should be:
@@ -53,9 +60,10 @@ export async function generateNotification(
       temperature: 0.7,
     });
 
-    return completion.choices[0].message.content || "Unable to generate notification";
+    return completion.choices[0].message.content || FALLBACK_MESSAGES[type];
   } catch (error) {
     console.error("AI Notification Generation Error:", error);
-    return "Unable to generate notification. Please try again later.";
+    // Return fallback message if AI generation fails
+    return FALLBACK_MESSAGES[type];
   }
 }
