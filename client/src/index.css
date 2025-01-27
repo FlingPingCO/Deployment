@@ -1,25 +1,25 @@
 /* Import statements should be at the top */
-@import '@fontsource/poppins/500.css';
-@import '@fontsource/poppins/200.css';
 @import '@fontsource/unbounded/500.css';
 @import '@fontsource/nunito/400.css';
+@import '@fontsource/figtree/200.css';
+@import '@fontsource/figtree/700.css';
 
-/* Custom Font Face Declarations */
-@font-face {
+/* Custom Font Face Declarations (Removed as @fontsource handles these now) */
+/*@font-face {
   font-family: 'Figtree';
   src: url('/fonts/Figtree-VariableFont_wght.ttf') format('truetype-variations');
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
-}
-
-@font-face {
+}*/
+/*@font-face {
   font-family: 'Figtree';
   src: url('/fonts/Figtree-Italic-VariableFont_wght.ttf') format('truetype-variations');
   font-weight: 100 900;
   font-style: italic;
   font-display: swap;
-}
+}*/
+
 
 @tailwind base;
 @tailwind components;
@@ -33,21 +33,8 @@
   body {
     font-family: 'Nunito', sans-serif;
     font-weight: 400;
-    @apply text-[#3C3C3C];
+    @apply bg-[#F4E9D9]/30 text-[#3C3C3C];
     position: relative;
-  }
-
-  /* Create a background layer with opacity */
-  body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: #F4E9D9;
-    opacity: 0.3;
-    z-index: -1;
   }
 
   /* Typography Hierarchy */
@@ -76,7 +63,7 @@
            transition-all duration-300;
   }
 
-  /* Accent elements */
+  /* Accent text classes */
   .accent-light {
     font-family: 'Figtree', sans-serif;
     font-weight: 200;
@@ -100,6 +87,18 @@
   .card {
     @apply bg-white rounded-lg shadow-md border border-[#3C3C3C]/10
            hover:shadow-lg transition-all duration-300;
+  }
+  /* Logo styles */
+  .logo-text {
+    font-family: 'Poppins', sans-serif;
+  }
+
+  .logo-main {
+    @apply text-[#0ACCA8] font-medium tracking-tight;
+  }
+
+  .logo-suffix {
+    @apply text-[#FF695E] font-extralight ml-[1px];
   }
 }
 
