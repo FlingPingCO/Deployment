@@ -1,0 +1,119 @@
+### **Project Overview**
+
+**Fling Ping** is a mobile app designed to revolutionize sexual health management by providing anonymous, private, and fun tools for staying informed and proactive. The app facilitates secure connections between users, rapid exposure notifications, and access to educational resources, all while prioritizing user privacy.
+
+**Core Objectives:**
+
+1. Ensure total anonymity for users with encrypted, privacy-first technology.
+2. Provide seamless functionality for creating anonymous "Ping Points" between partners.
+3. Deliver discreet, real-time notifications about potential STD exposure.
+4. Offer engaging and educational resources to promote smarter sexual health decisions.
+
+---
+
+### **Scope of Work**
+
+### **Core Features (MVP)**
+
+1. **Ping Points System**:
+    - Enable users to create anonymous, encrypted connections via:
+        - **Bluetooth Low Energy (BLE)** proximity detection.
+        - **QR Code or NFC** pairing options.
+    - Generate unique, timestamped random IDs (Ping Points) that link securely.
+2. **Exposure Notifications**:
+    - Daily scans of a secure, anonymized database to detect potential exposure.
+    - Notify users with discreet alerts, e.g., "You may have been exposed. Learn more."
+    - Include verified diagnosis reporting through healthcare integration in future phases.
+3. **Privacy Features**:
+    - End-to-end encryption for all data in transit.
+    - Data minimization: No names, emails, or personal identifiers stored.
+    - Allow users to delete Ping Points or deactivate their account completely.
+4. **Educational Resource Library**:
+    - Include FAQs, quick tips, and resource guides.
+    - Provide links to nearby testing centers and sexual health organizations.
+5. **User Onboarding and Dashboard**:
+    - Simple, fun onboarding experience that highlights privacy features.
+    - Dashboard to view notifications, manage Ping Points, and access resources.
+
+---
+
+### **Tech Stack**
+
+### **Frontend (Mobile App)**
+
+- **Framework**: React Native (cross-platform for iOS and Android).
+- **Programming Language**: TypeScript (type safety and scalability).
+- **UI Library**: React Native Paper or NativeBase for Material Design components.
+- **Navigation**: React Navigation for intuitive user flows.
+
+### **Backend**
+
+- **Framework**: Node.js with Express.js for handling API requests and business logic.
+- **Programming Language**: TypeScript (consistent with the frontend).
+- **Database**:
+    - Primary: Firebase Firestore (real-time syncing, cloud-hosted).
+    - Alternative: MongoDB Atlas (flexible schemas).
+- **Serverless Functions**: Firebase Cloud Functions for handling exposure alerts and background tasks.
+
+### **Security**
+
+- **Encryption**:
+    - Data in Transit: TLS/SSL.
+    - Data at Rest: AES-256 Encryption.
+- **Anonymity**:
+    - SHA-256 Hashing for anonymized Ping Points.
+- **Authentication**: Firebase Authentication using cryptographic IDs or phone verification.
+- **Compliance**: Adhere to GDPR and HIPAA principles.
+
+### **Proximity Detection**
+
+- **Bluetooth Low Energy (BLE)**: React Native BLE PLX library.
+- **QR Code/NFC**: Integrate QR code scanning and NFC capabilities for alternative pairing options.
+
+### **Notifications**
+
+- **Push Notifications**: Firebase Cloud Messaging (FCM).
+- **In-App Notifications**: Custom implementation for discreet messaging.
+
+### **Cloud Hosting**
+
+- **Primary**: Firebase (Authentication, Firestore, Cloud Functions, Hosting).
+- **Alternative**: AWS Amplify or Azure.
+
+### **Testing and Analytics**
+
+- **Unit Testing**: Jest.
+- **End-to-End Testing**: Detox.
+- **Crash Monitoring**: Firebase Crashlytics or Sentry.
+- **Performance Monitoring**: Firebase Performance Monitoring.
+- **Analytics**: Firebase Analytics or Mixpanel.
+
+---
+
+### **UI/UX Design Guidelines**
+
+### **Design Principles**
+
+- **Modern and Minimalistic**: Reflect the Fling Ping brand with clean, bold visuals and an intuitive layout.
+- **Fun and Empowering**: Use playful language, animations, and engaging visuals to break the stigma around sexual health.
+- **Privacy-Focused**: Ensure users see and understand privacy features at every step.
+
+### **Key Screens**
+
+1. **Onboarding**:
+    - Highlight core features like privacy, Ping Points, and notifications.
+    - Use illustrations and animations to keep it engaging.
+2. **Ping Points**:
+    - Clear interface for connecting via BLE, QR, or NFC.
+    - Visual feedback (e.g., ping animations) upon successful connection.
+3. **Notifications**:
+    - Minimalistic alert design with discreet phrasing, e.g., "Potential exposure detected."
+4. **Resource Library**:
+    - Categorized educational content with a search bar.
+5. **User Dashboard**:
+    - Summary of recent connections, notifications, and resources.
+
+### **Branding Guidelines**
+
+- **Colors**: Bold branding colors (e.g., pinks, purples, blues) with white space for clarity.
+- **Typography**: Use clean sans-serif fonts like Montserrat or Poppins for headings and Roboto for body text.

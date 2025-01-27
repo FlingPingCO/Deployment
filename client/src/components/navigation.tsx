@@ -1,7 +1,7 @@
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { NavigationMenu, NavigationMenuItem, NavigationMenuList } from "@/components/ui/navigation-menu";
-import { Heart, Bell, BookOpen, Home, TrendingUp, BarChart } from "lucide-react";
+import { Heart, Bell, BookOpen, Home, Bluetooth } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 
 export default function Navigation() {
@@ -48,23 +48,13 @@ export default function Navigation() {
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <Link href="/trends">
+              <Link href="/connect">
                 <Button variant="ghost" size="sm" className="text-white hover:bg-[#FFD166]/10 transition-colors duration-200">
-                  <TrendingUp className="mr-2 h-4 w-4 text-[#FFD166]" />
-                  Trends
+                  <Bluetooth className="mr-2 h-4 w-4 text-[#FFD166]" />
+                  Connect
                 </Button>
               </Link>
             </NavigationMenuItem>
-            {profile?.isAdmin && (
-              <NavigationMenuItem>
-                <Link href="/analytics">
-                  <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 transition-colors duration-200">
-                    <BarChart className="mr-2 h-4 w-4" />
-                    Analytics
-                  </Button>
-                </Link>
-              </NavigationMenuItem>
-            )}
           </NavigationMenuList>
         </NavigationMenu>
       </div>
