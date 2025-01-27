@@ -1,5 +1,5 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormDescription } from "@/components/ui/form";
 import { useForm } from "react-hook-form";
 import { Bell, AlertCircle, Loader2 } from "lucide-react";
@@ -86,13 +86,31 @@ export default function Notifications() {
     }
 
     // Validate required fields based on type
-    if (data.type === 'exposure' && !data.exposureType) {
-      toast({
-        title: "Error",
-        description: "Please select the type of exposure.",
-        variant: "destructive",
-      });
-      return;
+    if (data.type === 'exposure') {
+      if (!data.exposureType) {
+        toast({
+          title: "Error",
+          description: "Please select the type of exposure.",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (!data.testType) {
+        toast({
+          title: "Error",
+          description: "Please select or specify what you were exposed to.",
+          variant: "destructive",
+        });
+        return;
+      }
+      if (data.testType === 'other' && !data.otherTestType) {
+        toast({
+          title: "Error",
+          description: "Please specify the other STI/STD you were exposed to.",
+          variant: "destructive",
+        });
+        return;
+      }
     }
 
     if (data.type === 'test_result') {
@@ -169,29 +187,70 @@ export default function Notifications() {
               />
 
               {updateType === 'exposure' && (
-                <FormField
-                  control={form.control}
-                  name="exposureType"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Exposure Type</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select exposure type" />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="direct">Direct Exposure</SelectItem>
-                          <SelectItem value="indirect">Indirect Exposure</SelectItem>
-                        </SelectContent>
-                      </Select>
-                      <FormDescription>
-                        Direct: You were directly exposed. Indirect: You were notified of potential exposure by someone else.
-                      </FormDescription>
-                    </FormItem>
+                <>
+                  <FormField
+                    control={form.control}
+                    name="exposureType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Exposure Type</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select exposure type" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="direct">Direct Exposure</SelectItem>
+                            <SelectItem value="indirect">Indirect Exposure</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormDescription>
+                          Direct: You were directly exposed. Indirect: You were notified of potential exposure by someone else.
+                        </FormDescription>
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="testType"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Exposed To</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select what you were exposed to" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="chlamydia">Chlamydia</SelectItem>
+                            <SelectItem value="gonorrhea">Gonorrhea</SelectItem>
+                            <SelectItem value="syphilis">Syphilis</SelectItem>
+                            <SelectItem value="hiv">HIV</SelectItem>
+                            <SelectItem value="other">Other STI/STD</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </FormItem>
+                    )}
+                  />
+
+                  {testType === 'other' && (
+                    <FormField
+                      control={form.control}
+                      name="otherTestType"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Specify Other STI/STD</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter the specific STI/STD" {...field} />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
                   )}
-                />
+                </>
               )}
 
               {updateType === 'test_result' && (
