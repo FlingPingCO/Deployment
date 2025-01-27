@@ -1,25 +1,9 @@
 /* Import statements should be at the top */
 @import '@fontsource/unbounded/500.css';
 @import '@fontsource/nunito/400.css';
-@import '@fontsource/figtree/200.css';
 @import '@fontsource/figtree/700.css';
-
-/* Custom Font Face Declarations (Removed as @fontsource handles these now) */
-/*@font-face {
-  font-family: 'Figtree';
-  src: url('/fonts/Figtree-VariableFont_wght.ttf') format('truetype-variations');
-  font-weight: 100 900;
-  font-style: normal;
-  font-display: swap;
-}*/
-/*@font-face {
-  font-family: 'Figtree';
-  src: url('/fonts/Figtree-Italic-VariableFont_wght.ttf') format('truetype-variations');
-  font-weight: 100 900;
-  font-style: italic;
-  font-display: swap;
-}*/
-
+@import '@fontsource/poppins/500.css';
+@import '@fontsource/poppins/200.css';
 
 @tailwind base;
 @tailwind components;
@@ -74,20 +58,6 @@
     font-weight: 700;
   }
 
-  /* Highlight colors */
-  .highlight-blue {
-    @apply text-[#5EB4FF];
-  }
-
-  .highlight-yellow {
-    @apply text-[#FFD166];
-  }
-
-  /* Cards and containers */
-  .card {
-    @apply bg-white rounded-lg shadow-md border border-[#3C3C3C]/10
-           hover:shadow-lg transition-all duration-300;
-  }
   /* Logo styles */
   .logo-text {
     font-family: 'Poppins', sans-serif;
@@ -100,19 +70,6 @@
   .logo-suffix {
     @apply text-[#FF695E] font-extralight ml-[1px];
   }
-}
-
-/* Logo styles */
-.logo-text {
-  font-family: 'Poppins', sans-serif;
-}
-
-.logo-main {
-  @apply text-[#0ACCA8] font-medium tracking-tight;
-}
-
-.logo-suffix {
-  @apply text-[#FF695E] font-extralight ml-[1px];
 }
 
 /* Brand Animations */
