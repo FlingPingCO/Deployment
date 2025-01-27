@@ -16,6 +16,8 @@ export default function Contacts() {
       </div>
 
       <div className="grid gap-6">
+        <ContactTrace />
+
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -24,7 +26,27 @@ export default function Contacts() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ContactTrace />
+            <p className="text-sm mb-4">
+              The chart above displays your proximity history with other FlingPing users:
+            </p>
+            <ul className="list-disc pl-6 space-y-2 text-sm">
+              <li>
+                <span className="font-medium">Timeline:</span> The horizontal axis shows when 
+                contacts occurred over the last 24 hours
+              </li>
+              <li>
+                <span className="font-medium">Distance:</span> The vertical axis shows how close 
+                you were to each contact (in meters)
+              </li>
+              <li>
+                <span className="font-medium">Duration:</span> The size of each dot indicates 
+                how long the contact lasted
+              </li>
+              <li>
+                <span className="font-medium">Identity:</span> Each contact is shown by their 
+                anonymous Ping Pin - click any dot to see details
+              </li>
+            </ul>
           </CardContent>
         </Card>
 
@@ -37,21 +59,20 @@ export default function Contacts() {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm">
-              The visualization above shows your recent interactions with other FlingPing users 
-              in a way that protects everyone's privacy while helping you stay informed:
+              Your contact history helps you monitor your potential exposure risk:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-sm">
               <li>
-                <span className="font-medium">Time and Distance:</span> See when you were near 
-                other users and how close the contact was.
+                <span className="font-medium">Proximity Patterns:</span> See when and how often 
+                you're in close contact with others
               </li>
               <li>
-                <span className="font-medium">Duration:</span> Larger circles show longer 
-                periods of proximity, which can be important for exposure risk assessment.
+                <span className="font-medium">Risk Assessment:</span> Longer contact duration 
+                and closer proximity may indicate higher exposure risk
               </li>
               <li>
-                <span className="font-medium">Anonymous IDs:</span> Each contact is identified 
-                only by their Ping Pin, maintaining complete privacy.
+                <span className="font-medium">Contact Tracing:</span> If you receive a notification, 
+                you can identify when the potential exposure occurred
               </li>
             </ul>
           </CardContent>
