@@ -166,42 +166,37 @@ export function registerRoutes(app: Express): Server {
 
       // Base notification trends query with proper date formatting
       const notificationTrends = await db.execute(sql`
-        WITH dates AS (
+        WITH RECURSIVE dates AS (
           SELECT generate_series(
-            date_trunc('day', now() AT TIME ZONE 'UTC') - interval '${sql.raw(days.toString())} days',
-            date_trunc('day', now() AT TIME ZONE 'UTC'),
-            ${sql.raw(
-              granularity === 'daily' ? `interval '1 day'` :
-              granularity === 'weekly' ? `interval '1 week'` :
-              `interval '1 month'`
-            )}
-          ) as date
+            date_trunc('day', now()) - interval '${sql.raw(days.toString())} days',
+            date_trunc('day', now()),
+            interval '1 day'
+          )::timestamp as date
         )
         SELECT 
-          to_char(dates.date AT TIME ZONE 'UTC', 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as date,
-          COALESCE(COUNT(notifications.id), 0)::integer as count
+          to_char(dates.date, 'YYYY-MM-DD"T"HH24:MI:SS"Z"') as date,
+          COALESCE(COUNT(n.id), 0)::integer as count
         FROM dates
-        LEFT JOIN notifications ON date_trunc(${sql.raw(
-          granularity === 'daily' ? "'day'" :
-          granularity === 'weekly' ? "'week'" :
-          "'month'"
-        )}, notifications.created_at AT TIME ZONE 'UTC') = dates.date
+        LEFT JOIN notifications n ON date_trunc('day', n.created_at) = dates.date
         GROUP BY dates.date
         ORDER BY dates.date ASC;
       `);
 
-      // Optional demographic data with mock distribution
+      // Optional demographic data
       let demographicData = null;
       if (showDemographics) {
         demographicData = await db.execute(sql`
-          WITH total AS (
-            SELECT COUNT(*)::float as total_count 
-            FROM notifications 
+          WITH demo_data AS (
+            SELECT COUNT(*) as total_count
+            FROM notifications
             WHERE created_at > now() - interval '${sql.raw(days.toString())} days'
           )
           SELECT 
             age_range as range,
-            (count::integer) as count
+            CASE 
+              WHEN dd.total_count = 0 THEN 1
+              ELSE GREATEST(FLOOR(dd.total_count * percentage)::integer, 1)
+            END as count
           FROM (
             VALUES 
               ('18-24', 0.25),
@@ -209,27 +204,34 @@ export function registerRoutes(app: Express): Server {
               ('35-44', 0.20),
               ('45-54', 0.15),
               ('55+', 0.05)
-          ) as t(age_range, percentage)
-          CROSS JOIN total
-          CROSS JOIN LATERAL (
-            SELECT GREATEST((total.total_count * percentage)::integer, 1) as count
-          ) counts
-          ORDER BY range;
+          ) ranges(age_range, percentage)
+          CROSS JOIN demo_data dd
+          ORDER BY 
+            CASE age_range
+              WHEN '18-24' THEN 1
+              WHEN '25-34' THEN 2
+              WHEN '35-44' THEN 3
+              WHEN '45-54' THEN 4
+              WHEN '55+' THEN 5
+            END;
         `);
       }
 
-      // Optional location data with mock distribution
+      // Optional location data
       let locationData = null;
       if (showLocation) {
         locationData = await db.execute(sql`
-          WITH total AS (
-            SELECT COUNT(*)::float as total_count 
-            FROM notifications 
+          WITH loc_data AS (
+            SELECT COUNT(*) as total_count
+            FROM notifications
             WHERE created_at > now() - interval '${sql.raw(days.toString())} days'
           )
           SELECT 
             city,
-            (count::integer) as count
+            CASE 
+              WHEN ld.total_count = 0 THEN 1
+              ELSE GREATEST(FLOOR(ld.total_count * percentage)::integer, 1)
+            END as count
           FROM (
             VALUES 
               ('San Francisco', 0.30),
@@ -237,11 +239,8 @@ export function registerRoutes(app: Express): Server {
               ('New York', 0.20),
               ('Chicago', 0.15),
               ('Miami', 0.10)
-          ) as t(city, percentage)
-          CROSS JOIN total
-          CROSS JOIN LATERAL (
-            SELECT GREATEST((total.total_count * percentage)::integer, 1) as count
-          ) counts
+          ) cities(city, percentage)
+          CROSS JOIN loc_data ld
           ORDER BY count DESC;
         `);
       }
@@ -269,7 +268,7 @@ export function registerRoutes(app: Express): Server {
   //       GROUP BY date_trunc('day', created_at)
   //       ORDER BY date ASC
   //     `);
-
+  //
   //     res.json({
   //       notifications: notificationTrends.rows,
   //     });

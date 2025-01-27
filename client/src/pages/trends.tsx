@@ -190,10 +190,29 @@ export default function Trends() {
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={trendsData.demographics}>
                       <CartesianGrid strokeDasharray="3 3" />
-                      <XAxis dataKey="range" />
-                      <YAxis />
-                      <Tooltip formatter={(value) => [value, "Users"]} />
-                      <Bar dataKey="count" fill="hsl(var(--primary))" />
+                      <XAxis 
+                        dataKey="range"
+                        tick={{ fill: 'hsl(var(--foreground))' }}
+                      />
+                      <YAxis 
+                        tick={{ fill: 'hsl(var(--foreground))' }}
+                      />
+                      <Tooltip 
+                        formatter={(value) => [`${value} Users`, "Count"]}
+                        contentStyle={{
+                          backgroundColor: 'hsl(var(--popover))',
+                          border: '1px solid hsl(var(--border))',
+                          borderRadius: 'var(--radius)',
+                        }}
+                        labelStyle={{
+                          color: 'hsl(var(--foreground))',
+                        }}
+                      />
+                      <Bar 
+                        dataKey="count" 
+                        fill="hsl(var(--primary))"
+                        radius={[4, 4, 0, 0]}
+                      />
                     </BarChart>
                   </ResponsiveContainer>
                 </div>
