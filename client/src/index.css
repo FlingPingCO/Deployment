@@ -3,17 +3,29 @@
 @tailwind utilities;
 
 @layer base {
+  :root {
+    --teal: 168 90% 42%;
+    --coral: 4 100% 68%;
+    --blue: 213 100% 68%;
+    --yellow: 42 100% 70%;
+    --dark-gray: 0 0% 24%;
+    --soft-sand: 33 55% 90%;
+  }
+
   * {
     @apply border-border;
   }
 
   body {
     @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Nunito', sans-serif;
   }
 
-  /* Bold, Empowering Typography */
+  /* Typography System */
   h1, h2, h3, h4, h5, h6 {
-    @apply font-extrabold tracking-tight;
+    font-family: 'Unbounded', sans-serif;
+    font-weight: 500;
+    @apply tracking-tight;
   }
 
   h1 {
@@ -26,46 +38,33 @@
     letter-spacing: -0.01em;
   }
 
-  /* Empowering Button Styles */
+  /* Card Styles */
+  .card {
+    @apply hover:shadow-xl transition-all duration-300 
+           border-2 border-[#0ACCA8]/20 hover:border-[#0ACCA8]/40;
+  }
+
+  /* Button Styles */
   .btn-primary {
-    @apply bg-primary text-primary-foreground hover:bg-primary/90 
+    @apply bg-[#0ACCA8] text-white hover:bg-[#0ACCA8]/90 
            font-bold uppercase tracking-wide transition-all 
            transform hover:scale-105 hover:shadow-lg;
   }
 
-  /* Card Styles - Bold & Confident */
-  .card {
-    @apply hover:shadow-xl transition-all duration-300 
-           border-2 hover:border-primary/20;
-  }
-
-  /* Stay Smart, Stay Private Section Styles */
-  .feature-section {
-    @apply relative overflow-hidden rounded-2xl 
-           bg-gradient-to-br from-primary/5 to-primary/10
-           p-8 transition-all duration-300 hover:from-primary/10 hover:to-primary/20;
-  }
-
-  /* Empowering Links */
-  .link-empowered {
-    @apply font-semibold text-primary hover:text-primary/80 
-           underline-offset-4 hover:underline transition-all;
-  }
-
-  /* Bold Call-to-Actions */
-  .cta-button {
-    @apply inline-flex items-center justify-center px-8 py-4
-           bg-primary text-primary-foreground font-bold uppercase
-           tracking-wider rounded-xl shadow-lg hover:shadow-xl
-           transform transition-all hover:-translate-y-0.5
-           hover:bg-primary/90 focus:ring-2 focus:ring-primary/50;
-  }
-
-  /* Privacy-First Component Styles */
+  /* Privacy Badge */
   .privacy-badge {
     @apply inline-flex items-center gap-2 px-3 py-1.5
-           bg-secondary/10 text-secondary-foreground
+           bg-[#5EB4FF]/10 text-[#3C3C3C]
            rounded-full text-sm font-medium;
+  }
+
+  /* Call-to-Actions */
+  .cta-button {
+    @apply inline-flex items-center justify-center px-8 py-4
+           bg-[#FF695E] text-white font-bold uppercase
+           tracking-wider rounded-xl shadow-lg hover:shadow-xl
+           transform transition-all hover:-translate-y-0.5
+           hover:bg-[#FF695E]/90 focus:ring-2 focus:ring-[#FF695E]/50;
   }
 }
 

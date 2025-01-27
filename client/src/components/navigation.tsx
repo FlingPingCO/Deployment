@@ -14,9 +14,10 @@ export default function Navigation() {
       <div className="container flex h-16 items-center">
         <Link href="/">
           <Button variant="ghost" className="flex items-center space-x-2 px-2 group">
-            <Heart className="h-6 w-6 text-primary animate-pulse-ring" />
-            <span className="text-xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/80">
-              FlingPing.co
+            <Heart className="h-6 w-6 text-[#0ACCA8] animate-pulse-ring" />
+            <span className="text-xl">
+              <span className="font-medium" style={{ fontFamily: 'Poppins' }}>FlingPing</span>
+              <span className="font-extralight" style={{ fontFamily: 'Poppins' }}>.co</span>
             </span>
           </Button>
         </Link>
@@ -24,32 +25,32 @@ export default function Navigation() {
           <NavigationMenuList className="space-x-2">
             <NavigationMenuItem>
               <Link href="/dashboard">
-                <Button variant="ghost" size="sm" className="font-bold tracking-wide hover:bg-primary/10">
-                  <Home className="mr-2 h-4 w-4" />
+                <Button variant="ghost" size="sm" className="hover:bg-[#0ACCA8]/10 font-medium tracking-wide">
+                  <Home className="mr-2 h-4 w-4 text-[#0ACCA8]" />
                   Stay Smart
                 </Button>
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/notifications">
-                <Button variant="ghost" size="sm" className="font-bold tracking-wide hover:bg-primary/10">
-                  <Bell className="mr-2 h-4 w-4" />
+                <Button variant="ghost" size="sm" className="hover:bg-[#FF695E]/10 font-medium tracking-wide">
+                  <Bell className="mr-2 h-4 w-4 text-[#FF695E]" />
                   Stay Ahead
                 </Button>
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/resources">
-                <Button variant="ghost" size="sm" className="font-bold tracking-wide hover:bg-primary/10">
-                  <BookOpen className="mr-2 h-4 w-4" />
+                <Button variant="ghost" size="sm" className="hover:bg-[#5EB4FF]/10 font-medium tracking-wide">
+                  <BookOpen className="mr-2 h-4 w-4 text-[#5EB4FF]" />
                   Stay Informed
                 </Button>
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/trends">
-                <Button variant="ghost" size="sm" className="font-bold tracking-wide hover:bg-primary/10">
-                  <TrendingUp className="mr-2 h-4 w-4" />
+                <Button variant="ghost" size="sm" className="hover:bg-[#FFD166]/10 font-medium tracking-wide">
+                  <TrendingUp className="mr-2 h-4 w-4 text-[#FFD166]" />
                   Community
                 </Button>
               </Link>
@@ -57,7 +58,7 @@ export default function Navigation() {
             {profile?.isAdmin && (
               <NavigationMenuItem>
                 <Link href="/analytics">
-                  <Button variant="ghost" size="sm" className="font-bold tracking-wide hover:bg-primary/10">
+                  <Button variant="ghost" size="sm" className="hover:bg-[#3C3C3C]/10 font-medium tracking-wide">
                     <BarChart className="mr-2 h-4 w-4" />
                     Analytics
                   </Button>
