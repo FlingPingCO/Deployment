@@ -5,19 +5,19 @@ import { type Express } from "express";
 // Extend the session type definition
 declare module 'express-session' {
   interface SessionData {
-    views: number;
-    userId?: number;
+    pingPin?: string;
+    isAuthenticated?: boolean;
   }
 }
 
 export function setupSessionAuth(app: Express) {
   const MemoryStore = createMemoryStore(session);
   const sessionSettings: session.SessionOptions = {
-    secret: process.env.REPL_ID || "flingping-session-secret",
+    secret: process.env.SESSION_SECRET || "flingping-anonymous-session",
     resave: false,
     saveUninitialized: false,
     cookie: {
-      maxAge: 24 * 60 * 60 * 1000, // 24 hours
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
       secure: app.get("env") === "production",
       sameSite: "lax"
     },
@@ -31,4 +31,20 @@ export function setupSessionAuth(app: Express) {
   }
 
   app.use(session(sessionSettings));
+
+  // Middleware to check if user is authenticated
+  app.use((req, res, next) => {
+    // Skip auth check for public routes
+    if (req.path.startsWith('/api/health') || 
+        req.path === '/api/profiles' || 
+        req.path.startsWith('/api/resources')) {
+      return next();
+    }
+
+    if (!req.session.isAuthenticated && !req.path.startsWith('/api/auth')) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+
+    next();
+  });
 }
