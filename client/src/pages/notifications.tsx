@@ -57,7 +57,7 @@ export default function Notifications() {
                 Send Anonymous Notifications
               </Button>
               <p className="text-xs text-muted-foreground text-center mt-2">
-                This will notify all relevant parties from your recent PPs
+                This will notify all relevant parties from your recent PPs.
               </p>
             </form>
           </Form>
