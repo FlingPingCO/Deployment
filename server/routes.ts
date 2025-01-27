@@ -1,8 +1,8 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { db } from "@db";
-import { profiles, notifications, resources } from "@db/schema";
-import { eq } from "drizzle-orm";
+import { profiles, notifications, resources, achievements } from "@db/schema";
+import { eq, sql } from "drizzle-orm";
 
 export function registerRoutes(app: Express): Server {
   // Profile routes
@@ -77,6 +77,68 @@ export function registerRoutes(app: Express): Server {
       res.json(allResources);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch resources' });
+    }
+  });
+
+  // Analytics routes
+  app.get('/api/analytics/overview', async (req, res) => {
+    try {
+      const [userStats] = await db
+        .select({
+          totalUsers: sql<number>`count(*)`,
+          activeUsers: sql<number>`count(*) filter (where updated_at > now() - interval '30 days')`,
+        })
+        .from(profiles);
+
+      const [notificationStats] = await db
+        .select({
+          totalNotifications: sql<number>`count(*)`,
+          recentNotifications: sql<number>`count(*) filter (where created_at > now() - interval '30 days')`,
+        })
+        .from(notifications);
+
+      const [achievementStats] = await db
+        .select({
+          totalAchievements: sql<number>`count(*)`,
+        })
+        .from(achievements);
+
+      res.json({
+        users: {
+          total: userStats.totalUsers,
+          active: userStats.activeUsers,
+          growth: ((userStats.activeUsers / userStats.totalUsers) * 100).toFixed(1),
+        },
+        notifications: {
+          total: notificationStats.totalNotifications,
+          recent: notificationStats.recentNotifications,
+          growth: ((notificationStats.recentNotifications / notificationStats.totalNotifications) * 100).toFixed(1),
+        },
+        achievements: {
+          total: achievementStats.totalAchievements,
+        },
+      });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch analytics overview' });
+    }
+  });
+
+  app.get('/api/analytics/trends', async (req, res) => {
+    try {
+      const notificationTrends = await db.execute(sql`
+        SELECT date_trunc('day', created_at) as date,
+               count(*) as count
+        FROM notifications
+        WHERE created_at > now() - interval '30 days'
+        GROUP BY date_trunc('day', created_at)
+        ORDER BY date ASC
+      `);
+
+      res.json({
+        notifications: notificationTrends.rows,
+      });
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch analytics trends' });
     }
   });
 
