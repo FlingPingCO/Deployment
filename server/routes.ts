@@ -6,6 +6,20 @@ import { eq } from "drizzle-orm";
 
 export function registerRoutes(app: Express): Server {
   // Profile routes
+  app.get('/api/profile', async (req, res) => {
+    try {
+      const [profile] = await db
+        .select()
+        .from(profiles)
+        .where(eq(profiles.pingPin, 'ADMIN123'))
+        .limit(1);
+
+      res.json(profile);
+    } catch (error) {
+      res.status(500).json({ error: 'Failed to fetch profile' });
+    }
+  });
+
   app.post('/api/profiles', async (req, res) => {
     try {
       const profile = await db.insert(profiles).values(req.body).returning();
@@ -22,11 +36,11 @@ export function registerRoutes(app: Express): Server {
         .from(profiles)
         .where(eq(profiles.pingPin, req.params.pingPin))
         .limit(1);
-      
+
       if (!profile) {
         return res.status(404).json({ error: 'Profile not found' });
       }
-      
+
       res.json(profile);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch profile' });
@@ -49,7 +63,7 @@ export function registerRoutes(app: Express): Server {
         .select()
         .from(notifications)
         .where(eq(notifications.recipientPingPin, req.params.pingPin));
-      
+
       res.json(userNotifications);
     } catch (error) {
       res.status(500).json({ error: 'Failed to fetch notifications' });
