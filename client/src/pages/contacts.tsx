@@ -26,12 +26,6 @@ export default function Contacts() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <ul className="list-disc pl-6 space-y-2 text-sm">
-              <li>Each dot shows a past interaction with another FlingPing user (shown by their Ping Pin)</li>
-              <li>Larger circles mean you spent more time near that person</li>
-              <li>Click any point to see when and how long the contact lasted</li>
-            </ul>
-
             <div className="mt-4">
               <p className="text-sm">The chart above displays your proximity history with other FlingPing users:</p>
               <ul className="list-disc pl-6 space-y-2 text-sm mt-2">
