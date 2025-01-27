@@ -14,7 +14,7 @@ import Trends from "@/pages/trends";
 
 function Router() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-white">
       <Navigation />
       <main className="container mx-auto px-4 py-8">
         <Switch>
@@ -35,7 +35,12 @@ function Router() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Router />
+      <div className="min-h-screen relative">
+        <div className="fixed inset-0 bg-[#F4E9D9] opacity-30 pointer-events-none" />
+        <div className="relative z-10">
+          <Router />
+        </div>
+      </div>
       <Toaster />
     </QueryClientProvider>
   );
