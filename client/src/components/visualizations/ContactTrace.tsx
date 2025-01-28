@@ -18,9 +18,9 @@ interface Contact {
 export default function ContactTrace() {
   // Mock data showing realistic, spaced encounters throughout the day
   const contacts: Contact[] = [
-    { id: 'PP-7392', distance: 22.5, timestamp: Date.now() - 1000 * 60 * 60 * 20, duration: 15 }, // Yesterday evening
-    { id: 'PP-4521', distance: 18.2, timestamp: Date.now() - 1000 * 60 * 60 * 12, duration: 10 }, // This morning
-    { id: 'PP-9834', distance: 25.0, timestamp: Date.now() - 1000 * 60 * 60 * 4, duration: 8 },  // Recent afternoon
+    { id: 'PP-7392', distance: 0, timestamp: Date.now() - 1000 * 60 * 60 * 20, duration: 15 },
+    { id: 'PP-4521', distance: 5000, timestamp: Date.now() - 1000 * 60 * 60 * 12, duration: 10 },
+    { id: 'PP-9834', distance: 5280, timestamp: Date.now() - 1000 * 60 * 60 * 4, duration: 8 },
   ];
 
   const formatData = contacts.map(contact => ({
@@ -30,6 +30,13 @@ export default function ContactTrace() {
     id: contact.id,
     timeAgo: Math.round((Date.now() - contact.timestamp) / (1000 * 60)) // minutes ago
   }));
+
+  const formatDistance = (distance: number) => {
+    if (distance >= 5280) {
+      return `${(distance / 5280).toFixed(1)} miles (${distance.toLocaleString()} ft)`;
+    }
+    return `${distance.toLocaleString()} ft`;
+  };
 
   return (
     <Card className="w-full">
@@ -68,14 +75,14 @@ export default function ContactTrace() {
                 type="number" 
                 dataKey="y" 
                 name="Distance" 
-                unit=" ft"
+                tickFormatter={(value) => `${(value / 5280).toFixed(1)}mi`}
                 label={{ 
-                  value: 'Distance Between Users (feet)', 
+                  value: 'Distance Between Users', 
                   angle: -90, 
                   position: 'left',
                   offset: 10
                 }}
-                domain={[0, 30]} // Increased max distance to 30 feet
+                domain={[0, 10560]} // Max 2 miles in feet
               />
               <ZAxis 
                 type="number" 
@@ -93,7 +100,7 @@ export default function ContactTrace() {
                       <div className="bg-background border rounded p-4 shadow-lg">
                         <p className="font-semibold text-primary mb-2">{data.id}</p>
                         <div className="space-y-1 text-sm">
-                          <p>Distance: {data.y.toFixed(1)} feet</p>
+                          <p>Distance: {formatDistance(data.y)}</p>
                           <p>Duration: {data.z} minutes</p>
                           <p>Time: {data.x}:00</p>
                           <p className="text-muted-foreground mt-1">
