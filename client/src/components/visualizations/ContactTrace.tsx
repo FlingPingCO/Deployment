@@ -18,9 +18,11 @@ interface Contact {
 export default function ContactTrace() {
   // Mock data showing realistic, spaced encounters throughout the day
   const contacts: Contact[] = [
-    { id: 'PP-7392', distance: 0, timestamp: Date.now() - 1000 * 60 * 60 * 20, duration: 15 },
-    { id: 'PP-4521', distance: 5000, timestamp: Date.now() - 1000 * 60 * 60 * 12, duration: 10 },
-    { id: 'PP-9834', distance: 5280, timestamp: Date.now() - 1000 * 60 * 60 * 4, duration: 8 },
+    { id: 'PP-7392', distance: 0, timestamp: Date.now() - 1000 * 60 * 60 * 20, duration: 15 },          // 0 miles
+    { id: 'PP-4521', distance: 2640, timestamp: Date.now() - 1000 * 60 * 60 * 12, duration: 10 },       // 0.5 miles
+    { id: 'PP-9834', distance: 5280, timestamp: Date.now() - 1000 * 60 * 60 * 8, duration: 8 },         // 1 mile
+    { id: 'PP-2156', distance: 7920, timestamp: Date.now() - 1000 * 60 * 60 * 4, duration: 12 },        // 1.5 miles
+    { id: 'PP-6478', distance: 10560, timestamp: Date.now() - 1000 * 60 * 60 * 1, duration: 18 }        // 2 miles
   ];
 
   const formatData = contacts.map(contact => ({
