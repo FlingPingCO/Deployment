@@ -16,14 +16,11 @@ interface Contact {
 }
 
 export default function ContactTrace() {
-  // Mock data showing diverse, anonymous encounters throughout the day
+  // Mock data showing realistic, spaced encounters throughout the day
   const contacts: Contact[] = [
-    // Random encounters throughout the day with more varied distances
-    { id: 'PP-7392', distance: 15.5, timestamp: Date.now() - 1000 * 60 * 60 * 7, duration: 15 }, // Morning
-    { id: 'PP-4521', distance: 24.2, timestamp: Date.now() - 1000 * 60 * 60 * 5, duration: 10 }, // Late morning
-    { id: 'PP-9834', distance: 18.0, timestamp: Date.now() - 1000 * 60 * 60 * 4, duration: 20 }, // Early afternoon
-    { id: 'PP-2156', distance: 28.8, timestamp: Date.now() - 1000 * 60 * 60 * 2, duration: 12 }, // Late afternoon
-    { id: 'PP-6478', distance: 22.2, timestamp: Date.now() - 1000 * 60 * 60 * 1, duration: 18 }, // Evening
+    { id: 'PP-7392', distance: 22.5, timestamp: Date.now() - 1000 * 60 * 60 * 20, duration: 15 }, // Yesterday evening
+    { id: 'PP-4521', distance: 18.2, timestamp: Date.now() - 1000 * 60 * 60 * 12, duration: 10 }, // This morning
+    { id: 'PP-9834', distance: 25.0, timestamp: Date.now() - 1000 * 60 * 60 * 4, duration: 8 },  // Recent afternoon
   ];
 
   const formatData = contacts.map(contact => ({
