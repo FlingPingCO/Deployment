@@ -1,6 +1,6 @@
 import { ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, ZAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bell, Users, Info, Clock } from "lucide-react";
+import { Info, Clock } from "lucide-react";
 import {
   Tooltip as UITooltip,
   TooltipContent,
@@ -45,15 +45,7 @@ export default function ContactTrace() {
                 <Info className="h-4 w-4 text-muted-foreground" />
               </TooltipTrigger>
               <TooltipContent>
-                <div className="max-w-xs space-y-2">
-                  <p>This chart shows your proximity history with other FlingPing users over the last 24 hours:</p>
-                  <ul className="list-disc pl-4 text-sm">
-                    <li>Each dot represents a past contact</li>
-                    <li>Time shows when the contact occurred</li>
-                    <li>Distance shows how close you were</li>
-                    <li>Larger dots mean longer contact duration</li>
-                  </ul>
-                </div>
+                <p>Click any dot to see contact details</p>
               </TooltipContent>
             </UITooltip>
           </TooltipProvider>
@@ -129,23 +121,6 @@ export default function ContactTrace() {
               />
             </ScatterChart>
           </ResponsiveContainer>
-        </div>
-        <div className="mt-6 space-y-2">
-          <h4 className="font-semibold">Understanding Your Contact History:</h4>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm text-muted-foreground">
-            <div className="flex items-start gap-2">
-              <div className="w-2 h-2 mt-1.5 rounded-full bg-primary" />
-              <p>Each dot shows a past interaction with another FlingPing user (shown by their Ping Pin)</p>
-            </div>
-            <div className="flex items-start gap-2">
-              <div className="w-4 h-4 mt-1 rounded-full bg-primary/20" />
-              <p>Larger circles mean you spent more time near that person</p>
-            </div>
-            <div className="flex items-start gap-2">
-              <div className="w-2 h-2 mt-1.5 rounded-full bg-muted" />
-              <p>Click any point to see when and how long the contact lasted</p>
-            </div>
-          </div>
         </div>
       </CardContent>
     </Card>
