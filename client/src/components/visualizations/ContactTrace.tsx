@@ -10,17 +10,17 @@ import {
 
 interface Contact {
   id: string;
-  distance: number; // in meters
+  distance: number; // in feet
   timestamp: number;
   duration: number; // in minutes
 }
 
 export default function ContactTrace() {
-  // Mock data for beta visualization
+  // Mock data for beta visualization - converting distances to feet (1 meter ≈ 3.28084 feet)
   const contacts: Contact[] = [
-    { id: 'PP-1234', distance: 2, timestamp: Date.now() - 1000 * 60 * 60 * 2, duration: 15 },
-    { id: 'PP-5678', distance: 1, timestamp: Date.now() - 1000 * 60 * 60 * 1, duration: 30 },
-    { id: 'PP-9012', distance: 3, timestamp: Date.now() - 1000 * 60 * 30, duration: 5 },
+    { id: 'PP-1234', distance: 6.56, timestamp: Date.now() - 1000 * 60 * 60 * 2, duration: 15 },
+    { id: 'PP-5678', distance: 3.28, timestamp: Date.now() - 1000 * 60 * 60 * 1, duration: 30 },
+    { id: 'PP-9012', distance: 9.84, timestamp: Date.now() - 1000 * 60 * 30, duration: 5 },
   ];
 
   const formatData = contacts.map(contact => ({
@@ -68,9 +68,9 @@ export default function ContactTrace() {
                 type="number" 
                 dataKey="y" 
                 name="Distance" 
-                unit="m"
+                unit=" ft"
                 label={{ 
-                  value: 'Distance Between Users (meters)', 
+                  value: 'Distance Between Users (feet)', 
                   angle: -90, 
                   position: 'left',
                   offset: 10
@@ -93,7 +93,7 @@ export default function ContactTrace() {
                       <div className="bg-background border rounded p-4 shadow-lg">
                         <p className="font-semibold text-primary mb-2">{data.id}</p>
                         <div className="space-y-1 text-sm">
-                          <p>Distance: {data.y} meters</p>
+                          <p>Distance: {data.y.toFixed(1)} feet</p>
                           <p>Duration: {data.z} minutes</p>
                           <p>Time: {data.x}:00</p>
                           <p className="text-muted-foreground mt-1">
