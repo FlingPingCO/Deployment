@@ -18,12 +18,12 @@ interface Contact {
 export default function ContactTrace() {
   // Mock data showing diverse, anonymous encounters throughout the day
   const contacts: Contact[] = [
-    // Random encounters throughout the day
-    { id: 'PP-7392', distance: 6.5, timestamp: Date.now() - 1000 * 60 * 60 * 7, duration: 15 }, // Morning
-    { id: 'PP-4521', distance: 4.2, timestamp: Date.now() - 1000 * 60 * 60 * 5, duration: 10 }, // Late morning
-    { id: 'PP-9834', distance: 8.0, timestamp: Date.now() - 1000 * 60 * 60 * 4, duration: 20 }, // Early afternoon
-    { id: 'PP-2156', distance: 5.8, timestamp: Date.now() - 1000 * 60 * 60 * 2, duration: 12 }, // Late afternoon
-    { id: 'PP-6478', distance: 7.2, timestamp: Date.now() - 1000 * 60 * 60 * 1, duration: 18 }, // Evening
+    // Random encounters throughout the day with more varied distances
+    { id: 'PP-7392', distance: 15.5, timestamp: Date.now() - 1000 * 60 * 60 * 7, duration: 15 }, // Morning
+    { id: 'PP-4521', distance: 24.2, timestamp: Date.now() - 1000 * 60 * 60 * 5, duration: 10 }, // Late morning
+    { id: 'PP-9834', distance: 18.0, timestamp: Date.now() - 1000 * 60 * 60 * 4, duration: 20 }, // Early afternoon
+    { id: 'PP-2156', distance: 28.8, timestamp: Date.now() - 1000 * 60 * 60 * 2, duration: 12 }, // Late afternoon
+    { id: 'PP-6478', distance: 22.2, timestamp: Date.now() - 1000 * 60 * 60 * 1, duration: 18 }, // Evening
   ];
 
   const formatData = contacts.map(contact => ({
@@ -78,7 +78,7 @@ export default function ContactTrace() {
                   position: 'left',
                   offset: 10
                 }}
-                domain={[0, 15]} // Set max to 15 feet for indoor spaces
+                domain={[0, 30]} // Increased max distance to 30 feet
               />
               <ZAxis 
                 type="number" 
