@@ -34,11 +34,12 @@ export default function ContactTrace() {
   }));
 
   const formatDistance = (distance: number) => {
-    if (distance >= 5280) {
-      return `${(distance / 5280).toFixed(1)} miles (${distance.toLocaleString()} ft)`;
-    }
-    return `${distance.toLocaleString()} ft`;
+    const miles = distance / 5280;
+    if (distance === 0) return "0 miles (0 ft)";
+    return `${miles.toFixed(1)} miles (${distance.toLocaleString()} ft)`;
   };
+
+  const tickValues = [0, 2640, 5280, 7920, 10560]; // Exact positions for 0, 0.5, 1, 1.5, and 2 miles
 
   return (
     <Card className="w-full">
@@ -77,9 +78,10 @@ export default function ContactTrace() {
                 type="number" 
                 dataKey="y" 
                 name="Distance" 
-                tickFormatter={(value) => `${(value / 5280).toFixed(1)}mi`}
+                ticks={tickValues}
+                tickFormatter={(value) => `${(value / 5280).toFixed(1)}`}
                 label={{ 
-                  value: 'Distance Between Users', 
+                  value: 'Distance (miles)', 
                   angle: -90, 
                   position: 'left',
                   offset: 10
