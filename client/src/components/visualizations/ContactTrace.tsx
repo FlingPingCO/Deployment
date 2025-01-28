@@ -1,6 +1,6 @@
 import { ResponsiveContainer, ScatterChart, Scatter, XAxis, YAxis, ZAxis, Tooltip, Legend, CartesianGrid } from 'recharts';
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Info, Clock } from "lucide-react";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Info } from "lucide-react";
 import {
   Tooltip as UITooltip,
   TooltipContent,
@@ -33,23 +33,17 @@ export default function ContactTrace() {
 
   return (
     <Card className="w-full">
-      <CardHeader>
-        <div className="flex items-center justify-between">
-          <CardTitle className="flex items-center gap-2">
-            <Clock className="h-5 w-5 text-primary" />
-            24-Hour Contact History
-          </CardTitle>
-          <TooltipProvider>
-            <UITooltip>
-              <TooltipTrigger>
-                <Info className="h-4 w-4 text-muted-foreground" />
-              </TooltipTrigger>
-              <TooltipContent>
-                <p>Click any dot to see contact details</p>
-              </TooltipContent>
-            </UITooltip>
-          </TooltipProvider>
-        </div>
+      <CardHeader className="flex flex-row items-center justify-end space-x-2">
+        <TooltipProvider>
+          <UITooltip>
+            <TooltipTrigger>
+              <Info className="h-4 w-4 text-muted-foreground" />
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Click any dot to see contact details</p>
+            </TooltipContent>
+          </UITooltip>
+        </TooltipProvider>
       </CardHeader>
       <CardContent>
         <div className="h-[400px] w-full">
