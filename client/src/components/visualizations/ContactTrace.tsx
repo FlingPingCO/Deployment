@@ -16,11 +16,14 @@ interface Contact {
 }
 
 export default function ContactTrace() {
-  // Mock data for beta visualization - converting distances to feet (1 meter ≈ 3.28084 feet)
+  // Mock data showing diverse, anonymous encounters throughout the day
   const contacts: Contact[] = [
-    { id: 'PP-1234', distance: 6.56, timestamp: Date.now() - 1000 * 60 * 60 * 2, duration: 15 },
-    { id: 'PP-5678', distance: 3.28, timestamp: Date.now() - 1000 * 60 * 60 * 1, duration: 30 },
-    { id: 'PP-9012', distance: 9.84, timestamp: Date.now() - 1000 * 60 * 30, duration: 5 },
+    // Random encounters throughout the day
+    { id: 'PP-7392', distance: 6.5, timestamp: Date.now() - 1000 * 60 * 60 * 7, duration: 15 }, // Morning
+    { id: 'PP-4521', distance: 4.2, timestamp: Date.now() - 1000 * 60 * 60 * 5, duration: 10 }, // Late morning
+    { id: 'PP-9834', distance: 8.0, timestamp: Date.now() - 1000 * 60 * 60 * 4, duration: 20 }, // Early afternoon
+    { id: 'PP-2156', distance: 5.8, timestamp: Date.now() - 1000 * 60 * 60 * 2, duration: 12 }, // Late afternoon
+    { id: 'PP-6478', distance: 7.2, timestamp: Date.now() - 1000 * 60 * 60 * 1, duration: 18 }, // Evening
   ];
 
   const formatData = contacts.map(contact => ({
@@ -75,7 +78,7 @@ export default function ContactTrace() {
                   position: 'left',
                   offset: 10
                 }}
-                domain={[0, 'auto']}
+                domain={[0, 15]} // Set max to 15 feet for indoor spaces
               />
               <ZAxis 
                 type="number" 
