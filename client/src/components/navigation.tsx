@@ -25,7 +25,7 @@ export default function Navigation() {
           <NavigationMenuList className="space-x-2">
             <NavigationMenuItem>
               <Link href="/dashboard">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-[#0ACCA8]/10 transition-colors duration-200">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-[#0ACCA8]/10 hover:text-[#0ACCA8] transition-all duration-200">
                   <Home className="mr-2 h-4 w-4 text-[#0ACCA8]" />
                   Dashboard
                 </Button>
@@ -33,7 +33,7 @@ export default function Navigation() {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/contacts">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-[#5EB4FF]/10 transition-colors duration-200">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-[#5EB4FF]/10 hover:text-[#5EB4FF] transition-all duration-200">
                   <Users className="mr-2 h-4 w-4 text-[#5EB4FF]" />
                   Contacts
                 </Button>
@@ -41,7 +41,7 @@ export default function Navigation() {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/notifications">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-[#FF695E]/10 transition-colors duration-200">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-[#FF695E]/10 hover:text-[#FF695E] transition-all duration-200">
                   <Bell className="mr-2 h-4 w-4 text-[#FF695E]" />
                   Notifications
                 </Button>
@@ -49,7 +49,7 @@ export default function Navigation() {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/resources">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-[#5EB4FF]/10 transition-colors duration-200">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-[#5EB4FF]/10 hover:text-[#5EB4FF] transition-all duration-200">
                   <BookOpen className="mr-2 h-4 w-4 text-[#5EB4FF]" />
                   Resources
                 </Button>
@@ -57,7 +57,7 @@ export default function Navigation() {
             </NavigationMenuItem>
             <NavigationMenuItem>
               <Link href="/connect">
-                <Button variant="ghost" size="sm" className="text-white hover:bg-[#FFD166]/10 transition-colors duration-200">
+                <Button variant="ghost" size="sm" className="text-white hover:bg-[#FFD166]/10 hover:text-[#FFD166] transition-all duration-200">
                   <Bluetooth className="mr-2 h-4 w-4 text-[#FFD166]" />
                   Connect
                 </Button>

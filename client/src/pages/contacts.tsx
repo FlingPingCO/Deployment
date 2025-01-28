@@ -4,7 +4,7 @@ import { Card, CardContent } from "@/components/ui/card";
 export default function Contacts() {
   return (
     <div className="container mx-auto py-8 space-y-8">
-      <h1 className="text-2xl font-bold">24-Hour Contact History</h1>
+      <h1 className="text-2xl font-bold text-center">24-Hour Contact History</h1>
 
       <ContactTrace />
 
@@ -27,19 +27,6 @@ export default function Contacts() {
               <li><strong>Identity:</strong> Each contact is shown by their anonymous Ping Pin - click any dot to see details</li>
             </ul>
           </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardContent className="pt-6">
-          <h2 className="text-xl font-semibold mb-4">Understanding Your Contact History</h2>
-
-          <p>Your contact history helps you monitor your potential exposure risk:</p>
-          <ul className="list-disc pl-6 space-y-2 mt-4">
-            <li><strong>Proximity Patterns:</strong> See when and how often you're in close contact with others</li>
-            <li><strong>Risk Assessment:</strong> Longer contact duration and closer proximity may indicate higher exposure risk</li>
-            <li><strong>Contact Tracing:</strong> If you receive a notification, you can identify when the potential exposure occurred</li>
-          </ul>
         </CardContent>
       </Card>
 
